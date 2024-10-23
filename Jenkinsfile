@@ -5,7 +5,6 @@ pipeline {
             steps {
                 // Checkout the code from the Git repository
                 git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'LakhalBackDevOps'
-                }
             }
         }
         stage('Build Backend') {
@@ -22,6 +21,9 @@ pipeline {
         stage('Run MySQL and Backend') {
             steps {
                 script {
+                    // Create Docker network if it does not exist
+                    sh 'docker network create app-network || true'
+
                     // Run MySQL container
                     docker.image('mysql:latest').run('--network app-network --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mydb -d')
 
