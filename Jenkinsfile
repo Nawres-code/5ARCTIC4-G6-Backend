@@ -1,20 +1,26 @@
 pipeline {
     agent any
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from the Git repository
+                git 'https://github.com/Nawres-code/DevOpsBackend.git'
+            }
+        }
         stage('Build Backend') {
             steps {
                 script {
+                    // Build the backend JAR file using Maven
+                    sh 'mvn clean package'
+                    
                     // Build the backend Docker image
-                    docker.build('nawreslakhal/backend')
+                    docker.build('nawreslakhal/backend', '.')
                 }
             }
         }
         stage('Run MySQL and Backend') {
             steps {
                 script {
-                    // Ensure network exists
-                    docker.network.create('app-network')
-
                     // Run MySQL container
                     docker.image('mysql:latest').run('--network app-network --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mydb -d')
 
