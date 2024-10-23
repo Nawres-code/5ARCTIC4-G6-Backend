@@ -1,43 +1,31 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'MAVEN_HOME'
-    }
-
     stages {
+        stage('Clean up') {
+            steps {
+                // Clean up workspace before starting the pipeline
+                deleteDir()
+            }
+        }
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Nawres-code/DevOpsBackend.git'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-
-        stage('Package') {
-            steps {
-                sh 'mvn package'
+                // Clone the GitHub repository and checkout the 'salsabilbackdevops' branch
+                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'LakhalBackDevOps'
             }
         }
     }
 
     post {
+        always {
+            // Always clean the workspace after the pipeline execution
+            cleanWs()
+        }
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Pipeline executed successfully!'
         }
         failure {
-            echo 'Pipeline failed!'
+            echo 'Pipeline failed.'
         }
     }
 }
