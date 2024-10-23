@@ -1,47 +1,31 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK20'  
-        maven 'Maven_3.6.3' 
-    }
-
-    environment {
-        GIT_REPO = 'https://github.com/Nawres-code/DevOpsBackend.git'
-    }
-
     stages {
-        stage('Cloner le dépôt') {
+        stage('Clean up') {
             steps {
-                git branch: 'main', url: "${GIT_REPO}"
+                // Clean up workspace before starting the pipeline
+                deleteDir()
             }
         }
-        stage('Construire le projet') {
+        stage('Checkout') {
             steps {
-                sh 'mvn clean install'
-            }
-        }
-        stage('Exécuter les tests') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-        stage('Déployer') {
-            steps {
-                echo 'Déploiement...'
+                // Clone the GitHub repository and checkout the 'salsabilbackdevops' branch
+                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'yosserbackdev'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline terminé.'
+            // Always clean the workspace after the pipeline execution
+            cleanWs()
         }
         success {
-            echo 'Pipeline exécuté avec succès.'
+            echo 'Pipeline executed successfully!'
         }
         failure {
-            echo 'Le pipeline a échoué.'
+            echo 'Pipeline failed.'
         }
     }
 }
