@@ -2,38 +2,23 @@ pipeline {
     agent any
 
     stages {
+        stage('Clean up') {
+            steps {
+                // Clean up workspace before starting the pipeline
+                deleteDir()
+            }
+        }
         stage('Checkout') {
             steps {
-                // Clone the GitHub repository
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'main'
-            }
-        }
-        
-        stage('Build Backend') {
-            steps {
-                // Build the Spring Boot backend using Maven
-                sh 'mvn clean install'
-            }
-        }
-
-        stage('Run Unit Tests') {
-            steps {
-                // Run unit tests
-                sh 'mvn test'
-            }
-        }
-        
-        stage('Package Application') {
-            steps {
-                // Package the Spring Boot app into a JAR file
-                sh 'mvn package'
+                // Clone the GitHub repository and checkout the 'salsabilbackdevops' branch
+                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
             }
         }
     }
 
     post {
         always {
-            // Clean workspace after the pipeline execution
+            // Always clean the workspace after the pipeline execution
             cleanWs()
         }
         success {
