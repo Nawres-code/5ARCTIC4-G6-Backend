@@ -1,31 +1,27 @@
 pipeline {
     agent any
-
     stages {
-        stage('Clean up') {
+        stage('Build Backend') {
             steps {
-                // Clean up workspace before starting the pipeline
-                deleteDir()
+                script {
+                    // Build the backend Docker image
+                    docker.build('nawreslakhal/backend')
+                }
             }
         }
-        stage('Checkout') {
+        stage('Run MySQL and Backend') {
             steps {
-                // Clone the GitHub repository and checkout the 'salsabilbackdevops' branch
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'LakhalBackDevOps'
-            }
-        }
-    }
+                script {
+                    // Ensure network exists
+                    docker.network.create('app-network')
 
-    post {
-        always {
-            // Always clean the workspace after the pipeline execution
-            cleanWs()
-        }
-        success {
-            echo 'Pipeline executed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed.'
+                    // Run MySQL container
+                    docker.image('mysql:latest').run('--network app-network --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mydb -d')
+
+                    // Run Backend container in the same network
+                    docker.image('nawreslakhal/backend').run('--network app-network --name backend-container -p 8080:8080 -d')
+                }
+            }
         }
     }
 }
