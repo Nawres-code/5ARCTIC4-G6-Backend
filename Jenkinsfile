@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from the Git repository
-                git branch: 'LakhalBackDevops', url: 'https://github.com/Nawres-code/DevOpsBackend.git'
+                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'LakhalBackDevOps'
                 }
             }
         }
