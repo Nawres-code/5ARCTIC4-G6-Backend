@@ -1,15 +1,22 @@
 pipeline {
     agent any
     stages {
-        stage('Clone Repository') {
+        stage('Clone') {
             steps {
-                // Clone the specified branch of the repository
-                git branch: 'LakhalBackDevOps', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                git(
+                    branch: 'LakhalBackDevOps',
+                    url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git',
+                    changelog: false,
+                    poll: false,
+                    shallow: true,
+                    depth: 1
+                )
             }
         }
         stage('Build and Deploy') {
             steps {
                 script {
+                    // Ensure Docker is running before building
                     // Build Docker images using docker-compose
                     sh 'docker-compose build'
 
@@ -19,7 +26,7 @@ pipeline {
             }
         }
     }
-        post {
+    post {
         success {
             echo 'Deployment Successful!'  
         }
