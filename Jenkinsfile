@@ -1,36 +1,30 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                // Checkout the code from the Git repository
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'LakhalBackDevOps'
+                // Clone the specified branch of the repository
+                git branch: 'LakhalDevOpsFrontend', url: 'https://github.com/Nawres-code/DevOpsFrontend.git'
             }
         }
-        stage('Build Backend') {
+        stage('Build and Deploy') {
             steps {
                 script {
-                    // Build the backend JAR file using Maven
-                    sh 'mvn clean package'
-                    
-                    // Build the backend Docker image
-                    docker.build('nawreslakhal/backend', '.')
+                    // Build Docker images using docker-compose
+                    sh 'docker-compose build'
+
+                    // Bring up the services defined in docker-compose.yml
+                    sh 'docker-compose up -d'
                 }
             }
         }
-        stage('Run MySQL and Backend') {
-            steps {
-                script {
-                    // Create Docker network if it does not exist
-                    sh 'docker network create app-network || true'
-
-                    // Run MySQL container
-                    docker.image('mysql:latest').run('--network app-network --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mydb -d')
-
-                    // Run Backend container in the same network
-                    docker.image('nawreslakhal/backend').run('--network app-network --name backend-container -p 8080:8080 -d')
-                }
-            }
+    }
+        post {
+        success {
+            echo 'Deployment Successful!'  // Message if the deployment is successful
+        }
+        failure {
+            echo 'Deployment Failed!'  // Message if the deployment fails
         }
     }
 }
