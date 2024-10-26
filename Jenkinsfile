@@ -21,10 +21,10 @@ pipeline {
     }
         post {
         success {
-            echo 'Deployment Successful!'  // Message if the deployment is successful
+            echo 'Deployment Successful!'  
         }
         failure {
-            echo 'Deployment Failed!'  // Message if the deployment fails
+            echo 'Deployment Failed!'  
         }
     }
 }
