@@ -4,7 +4,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Clone the specified branch of the repository
-                git branch: 'LakhalDevOpsFrontend', url: 'https://github.com/Nawres-code/DevOpsFrontend.git'
+                git branch: 'LakhalBackDevOps', url: 'https://github.com/Nawres-code/DevOpsBackend.git'
             }
         }
         stage('Build and Deploy') {
