@@ -14,10 +14,10 @@ pipeline {
                 script {
                     // Ensure Docker is running before building
                     // Build Docker images using docker-compose
-                    sh 'docker-compose build'
+                    sh 'docker compose build'
 
                     // Bring up the services defined in docker-compose.yml
-                    sh 'docker-compose up -d'
+                    sh 'docker compose up -d'
                 }
             }
         }
