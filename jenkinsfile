@@ -14,6 +14,12 @@ pipeline {
                 git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
             }
         }
+        stage('Build and Deploy to Nexus') {
+            steps {
+                // Run Maven deploy while skipping tests
+                sh 'mvn clean deploy -DskipTests'
+            }
+        }
     }
 
     post {
