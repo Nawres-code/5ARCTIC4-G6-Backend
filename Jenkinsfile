@@ -5,11 +5,7 @@ pipeline {
             steps {
                 git(
                     branch: 'LakhalBackDevOps',
-                    url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git',
-                    changelog: false,
-                    poll: false,
-                    shallow: true,
-                    depth: 1
+                    url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
                 )
             }
         }
