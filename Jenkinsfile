@@ -1,31 +1,30 @@
 pipeline {
     agent any
-
     stages {
-        stage('Clean up') {
+        stage('Clone Repository') {
             steps {
-                // Clean up workspace before starting the pipeline
-                deleteDir()
+                // Clone the specified branch of the repository
+                git branch: 'LakhalDevOpsFrontend', url: 'https://github.com/Nawres-code/DevOpsFrontend.git'
             }
         }
-        stage('Checkout') {
+        stage('Build and Deploy') {
             steps {
-                // Clone the GitHub repository and checkout the 'salsabilbackdevops' branch
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'LakhalBackDevOps'
+                script {
+                    // Build Docker images using docker-compose
+                    sh 'docker-compose build'
+
+                    // Bring up the services defined in docker-compose.yml
+                    sh 'docker-compose up -d'
+                }
             }
         }
     }
-
-    post {
-        always {
-            // Always clean the workspace after the pipeline execution
-            cleanWs()
-        }
+        post {
         success {
-            echo 'Pipeline executed successfully!'
+            echo 'Deployment Successful!'  // Message if the deployment is successful
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Deployment Failed!'  // Message if the deployment fails
         }
     }
 }
