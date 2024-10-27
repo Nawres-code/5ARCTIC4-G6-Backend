@@ -20,6 +20,21 @@ pipeline {
                 sh 'mvn clean deploy -DskipTests'
             }
         }
+        stage('Build image') {
+            steps {
+                echo 'Building Docker image'
+                sh 'docker build -t salsabilhamraoui510802/backimagef:1.0.0 .'
+            }
+        }
+        stage('Push image') {
+            steps {
+                echo 'Pushing Docker image'
+                sh '''
+                  docker login -u salsabilhamraoui510802 -p sousousal
+                  docker push salsabilhamraoui510802/backimagef:1.0.0
+                '''
+            }
+        }
     }
 
     post {
