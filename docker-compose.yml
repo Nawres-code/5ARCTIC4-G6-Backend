@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   mysql:
-    image: nawreslakhal/devops:mysql
+    image: mysql:8.0
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -12,13 +10,13 @@ services:
     networks:
       - my-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
 
   backend:
-    image: nawreslakhal/devops:backend
+    image: nawreslakhal/devops2:backend
     container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
@@ -34,7 +32,7 @@ services:
       - my-network
 
   frontend:
-    image: nawreslakhal/devops:frontend
+    image: nawreslakhal/devops2:frontend
     container_name: frontend-container
     ports:
       - "4200:80"

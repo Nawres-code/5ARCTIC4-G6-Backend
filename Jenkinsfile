@@ -1,30 +1,36 @@
 pipeline {
     agent any
     stages {
-        stage('Clone Repository') {
+        stage('Clone') {
             steps {
-                // Clone the specified branch of the repository
-                git branch: 'LakhalDevOpsFrontend', url: 'https://github.com/Nawres-code/DevOpsFrontend.git'
+                git(
+                    branch: 'LakhalBackDevOps',
+                    url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                )
             }
         }
         stage('Build and Deploy') {
             steps {
                 script {
+                    // Ensure Docker is running before building
+                    // Stop and remove any existing containers with the same name
+                    sh 'docker compose down || true'
+
                     // Build Docker images using docker-compose
-                    sh 'docker-compose build'
+                    sh 'docker compose build'
 
                     // Bring up the services defined in docker-compose.yml
-                    sh 'docker-compose up -d'
+                    sh 'docker compose up -d'
                 }
             }
         }
     }
-        post {
+    post {
         success {
-            echo 'Deployment Successful!'  // Message if the deployment is successful
+            echo 'Deployment Successful!'
         }
         failure {
-            echo 'Deployment Failed!'  // Message if the deployment fails
+            echo 'Deployment Failed!'
         }
     }
 }
