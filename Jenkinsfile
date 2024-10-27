@@ -13,6 +13,9 @@ pipeline {
             steps {
                 script {
                     // Ensure Docker is running before building
+                    // Stop and remove any existing containers with the same name
+                    sh 'docker compose down || true'
+
                     // Build Docker images using docker-compose
                     sh 'docker compose build'
 
