@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 //@PreAuthorize("hasRole('SimpleCLient')")
 @RequestMapping("/comments")
-@CrossOrigin(origins = "http://192.168.163.145:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CommnetsControllerImpl {
     @Autowired
     IGestionComments gComments ;
