@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/reclamationdashboard")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://192.168.40.149:4200")
 public class ReclamationDashboardController {
 
     private final IReclamationRepository reclamationRepository;
