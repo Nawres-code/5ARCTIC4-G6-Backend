@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 //@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/poste")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://192.168.205.3:4200")
 public class PosteControllerImpl {
     @Autowired
     IGestionPoste gPoste ;
