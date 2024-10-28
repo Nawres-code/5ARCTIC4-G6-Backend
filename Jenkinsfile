@@ -2,36 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('Clean Workspace') {
+        stage('Clean up') {
             steps {
-                // Nettoyer l'espace de travail avant de démarrer le pipeline
-                cleanWs()
+                deleteDir() // Nettoie le workspace avant de commencer
             }
         }
+
         stage('Checkout') {
             steps {
-                // Clone le dépôt GitHub et vérifie la branche 'yosserbacknew'
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'yosserbacknew'
-            }
-        }
-        stage('Build') {
-            steps {
-                echo 'Build process would go here'
-                // Ajoutez ici les étapes de build si nécessaire
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Test process would go here'
-                // Ajoutez ici les étapes de test si nécessaire
+                script {
+                    retry(3) { // Réessaye jusqu'à 3 fois en cas d'erreur de connexion
+                        echo "Cloning repository from branch 'yosserbacknew'"
+                        git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'yosserbacknew'
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            // Nettoyer l'espace de travail après l'exécution du pipeline
-            cleanWs()
+            cleanWs() // Nettoie le workspace après exécution du pipeline
         }
         success {
             echo 'Pipeline executed successfully!'
