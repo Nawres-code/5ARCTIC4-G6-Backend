@@ -18,10 +18,10 @@ spec:
       - name: backend
         image: lakhalacr.azurecr.io/my-backend:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 9200  
         env:
         - name: MYSQL_HOST
-          value: "mysql-service"
+          value: "mysql"  
         - name: MYSQL_DATABASE
           value: "testParking1"
         - name: MYSQL_USER
