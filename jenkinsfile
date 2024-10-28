@@ -14,18 +14,26 @@ pipeline {
                 git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
             }
         }
+
+        /* Commented Out Stage: Build and Deploy to Nexus 
         stage('Build and Deploy to Nexus') {
             steps {
                 // Run Maven deploy while skipping tests
                 sh 'mvn clean deploy -DskipTests'
             }
         }
+        */
+
+        /* Commented Out Stage: Build Docker Image 
         stage('Build image') {
             steps {
                 echo 'Building Docker image'
                 sh 'docker build -t salsabilhamraoui510802/backimagef:1.0.0 .'
             }
         }
+        */
+
+        /* Commented Out Stage: Push Docker Image 
         stage('Push image') {
             steps {
                 echo 'Pushing Docker image'
@@ -35,6 +43,7 @@ pipeline {
                 '''
             }
         }
+        */
     }
 
     post {
