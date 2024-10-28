@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/userdashboard")
-@CrossOrigin(origins = "http://192.168.163.145:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserDashboardController {
 
     private final UserRepository userRepository;
