@@ -1,30 +1,36 @@
 pipeline {
     agent any
-
     stages {
-        stage('Clean up') {
+        stage('Clone') {
             steps {
-                // Clean up workspace before starting the pipeline
-                deleteDir()
+                git(
+                    branch: 'yosserbacknew',
+                    url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                )
             }
         }
-        stage('Checkout') {
+        stage('Build and Deploy') {
             steps {
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'yosserbacknew'
+                script {
+                    // Ensure Docker is running before building
+                    // Stop and remove any existing containers with the same name
+                    sh 'docker compose down || true'
+
+                    // Build Docker images using docker-compose
+                    sh 'docker compose build'
+
+                    // Bring up the services defined in docker-compose.yml
+                    sh 'docker compose up -d'
+                }
             }
         }
     }
-
     post {
-        always {
-            // Always clean the workspace after the pipeline execution
-            cleanWs()
-        }
         success {
-            echo 'Pipeline executed successfully!'
+            echo 'Deployment Successful!'  
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Deployment Failed!'  
         }
     }
 }
