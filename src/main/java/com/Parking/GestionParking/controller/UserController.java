@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 //@PreAuthorize("hasRole('SimpleCLient')")
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://192.168.163.145:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 //@PreAuthorize("hasRole('SimpleCLient')")
 
 public class UserController {
