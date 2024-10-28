@@ -1,4 +1,4 @@
- Nawres Lakhal
+
 pipeline {
     agent any
     stages {
