@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: backend-service
 spec:
-  type: ClusterIP
+  type: ClusterIP  
   selector:
-    app: backend
+    app: backend    
   ports:
     - protocol: TCP
-      port: 9200       
+      port: 9201    
       targetPort: 9200  
