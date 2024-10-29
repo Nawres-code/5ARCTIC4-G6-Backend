@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: mysql
 spec:
-  type: ClusterIP  # Can also be NodePort or LoadBalancer based on your needs
+  type: ClusterIP  
   selector:
     app: mysql
   ports:
     - protocol: TCP
-      port: 3306  # Port to access the MySQL service
+      port: 3306  
       targetPort: 3306
