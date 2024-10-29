@@ -13,19 +13,14 @@ pipeline {
 
     stages {
         stage('Clone Repos') {
-            parallel {
-                stage('Clone Frontend Repo') {
-                    steps {
-                        dir('frontend') {
-                            git branch: 'LakhalDevOpsFrontend', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git'
-                        }
+            steps {
+                script {
+                    // Assuming both repos are already cloned by Jenkins
+                    dir('frontend') {
+                        sh 'git checkout LakhalDevOpsFrontend'
                     }
-                }
-                stage('Clone Backend Repo') {
-                    steps {
-                        dir('backend') {
-                            git branch: 'LakhalBackDevOps', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
-                        }
+                    dir('backend') {
+                        sh 'git checkout LakhalBackDevOps'
                     }
                 }
             }
@@ -100,6 +95,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        // Adjust paths according to where the manifests are located in both repos
                         sh '''
                         kubectl apply -f mysql-deployment.yaml
                         kubectl apply -f mysql-service.yaml
