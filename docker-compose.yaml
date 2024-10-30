@@ -16,7 +16,7 @@ services:
       retries: 10
 
   backend:
-    image: yosserchb123/vmbackend
+    image: yosserchb123/imagebackfinal
     container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
@@ -32,7 +32,7 @@ services:
       - my-network
 
   frontend:
-    image: yosserchb123/vmfront
+    image: yosserchb123/frontimage
     container_name: frontend-container
     ports:
       - "4200:80"
