@@ -3,39 +3,27 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                script {
-                    // Cloner le dépôt
-                    git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
-                }
+                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
             }
         }
-        
+
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    // Vérifier l'accessibilité de SonarQube
-                    echo 'Starting SonarQube analysis...'
-                    withSonarQubeEnv('SonarQube') {
-                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
-                    }
+                withSonarQubeEnv('sq1') { // Remplacez 'sq1' par le nom de votre serveur SonarQube configuré
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
                 }
             }
         }
-        
+
         stage('Build and Deploy to Nexus') {
             steps {
-                script {
-                    echo 'Deploying to Nexus...'
-                    sh 'mvn clean deploy -DskipTests'
-                }
+                sh 'mvn clean deploy -DskipTests'
             }
         }
-        
+
         stage('Build and Deploy') {
             steps {
                 script {
-                    // S'assurer que Docker est en cours d'exécution
-                    echo 'Building and deploying Docker containers...'
                     sh 'docker compose down || true'
                     sh 'docker compose build'
                     sh 'docker compose up -d'
@@ -43,7 +31,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         success {
             echo 'Deployment Successful!'
