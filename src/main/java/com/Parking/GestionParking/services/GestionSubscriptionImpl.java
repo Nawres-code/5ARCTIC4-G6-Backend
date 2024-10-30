@@ -20,10 +20,11 @@ public class GestionSubscriptionImpl implements IGestionSubscription {
     ISubscriptionHistoryRepository subscriptionHistoryRepository;
 
     public List<Subscription> retrieveAllSubscription() {
-        // TODO Auto-generated method stub
-        log.info("*****************"+ SubscriptionRepo.findAll().size());
-        return SubscriptionRepo.findAll();
+        List<Subscription> subscriptions = SubscriptionRepo.findAll(); // Call once and store the result
+        log.info("*****************" + subscriptions.size());
+        return subscriptions; // Return the stored result
     }
+
 
     ;
 

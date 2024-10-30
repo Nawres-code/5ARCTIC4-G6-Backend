@@ -17,18 +17,20 @@ import static org.hibernate.query.sqm.tree.SqmNode.log;
 public class GestionSubscriptionHistoryImpl implements IGestionSubscriptionHistory {
     @Autowired
     ISubscriptionHistoryRepository SubhistoryRepo;
+    @Autowired
     ISubscriptionRepository subscriptionRepo;
     @Override
     public SubscriptionHistory assignHistoryToSubscription(Long numSubHistory , Long numSubscription) {
-        Subscription cour = subscriptionRepo.findById(numSubscription).get();
+        Subscription sub = subscriptionRepo.findById(numSubscription).get();
         SubscriptionHistory subscriptionHistory = SubhistoryRepo.findById(numSubHistory).get();
-        //subscriptionHistory.setCour(cour);
+        subscriptionHistory.setSubscription(sub);
         return SubhistoryRepo.save(subscriptionHistory);
     }
     @Override
-    public List<SubscriptionHistory> retrieveAllSubscriptionHistory(){
-        // TODO Auto-generated method stub
-        log.info("***************"+ SubhistoryRepo.findAll().size());
-        return SubhistoryRepo.findAll();
+    public List<SubscriptionHistory> retrieveAllSubscriptionHistory() {
+        List<SubscriptionHistory> histories = SubhistoryRepo.findAll(); // Call once and store
+        log.info("***************" + histories.size());
+        return histories; // Return the stored result
     }
+
 }
