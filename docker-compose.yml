@@ -16,7 +16,7 @@ services:
       retries: 10
 
   backend:
-    image: nawreslakhal/devops2:backend
+    image: nawreslakhal/devops:backend
     container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
@@ -32,7 +32,7 @@ services:
       - my-network
 
   frontend:
-    image: nawreslakhal/devops2:frontend
+    image: nawreslakhal/devops:frontend
     container_name: frontend-container
     ports:
       - "4200:80"
