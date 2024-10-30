@@ -1,6 +1,13 @@
 pipeline {
     agent any
     stages {
+        stage('Clean') {
+            steps {
+                // Nettoie le répertoire de travail
+                deleteDir()
+            }
+        }
+
         stage('Clone') {
             steps {
                 git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
@@ -15,7 +22,7 @@ pipeline {
             }
         }
 
- stage('Test') {
+        stage('Test') {
             steps {
                 sh '''
                     mvn clean install -DskipTests=false
@@ -23,8 +30,6 @@ pipeline {
                 '''
             }
         }
-
-      
 
         stage('Build and Deploy to Nexus') {
             steps {
