@@ -3,36 +3,41 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
+                script {
+                    // Cloner le dépôt
+                    git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
+                }
             }
         }
         
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') { // Replace 'SonarQube' with your SonarQube server configuration name
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
+                script {
+                    // Vérifier l'accessibilité de SonarQube
+                    echo 'Starting SonarQube analysis...'
+                    withSonarQubeEnv('SonarQube') {
+                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
+                    }
                 }
             }
         }
         
         stage('Build and Deploy to Nexus') {
             steps {
-                // Deploy the artifact to Nexus repository
-                sh 'mvn clean deploy -DskipTests'
+                script {
+                    echo 'Deploying to Nexus...'
+                    sh 'mvn clean deploy -DskipTests'
+                }
             }
         }
         
         stage('Build and Deploy') {
             steps {
                 script {
-                    // Ensure Docker is running before building
-                    // Stop and remove any existing containers with the same name
+                    // S'assurer que Docker est en cours d'exécution
+                    echo 'Building and deploying Docker containers...'
                     sh 'docker compose down || true'
-
-                    // Build Docker images using docker-compose
                     sh 'docker compose build'
-
-                    // Bring up the services defined in docker-compose.yml
                     sh 'docker compose up -d'
                 }
             }
