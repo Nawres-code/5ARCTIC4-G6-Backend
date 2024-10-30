@@ -43,8 +43,6 @@ pipeline {
                     // Tear down any existing containers
                     sh 'docker-compose down || true'
                     
-                    // Rebuild images without using the cache
-                    sh 'docker-compose build --no-cache'
                     
                     // Start containers in detached mode
                     sh 'docker-compose up -d'
