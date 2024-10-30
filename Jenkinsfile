@@ -1,44 +1,31 @@
 pipeline {
-    agent any 
-
-    environment {
-        NEXUS_CREDENTIALS = credentials('nexus-credentials') // Replace with your Jenkins credentials ID
-        MVN_HOME = tool name: 'Maven 3.6.3', type: 'maven' // Ensure this matches your Maven installation in Jenkins
-    }
-
+    agent any
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                // Checkout your source code from the repository
-                git url: 'https://github.com/yourusername/yourrepository.git', branch: 'main' // Replace with your repo URL
-            }
-        }
-        
-        stage('Build') {
-            steps {
-                script {
-                    // Run Maven clean package
-                    sh "'${MVN_HOME}/bin/mvn' clean package"
+                retry(3) { // Retries the Git clone up to 3 times in case of failure
+                    git(
+                        branch: 'yosserbacknew',
+                        url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                    )
                 }
             }
         }
 
-        stage('Deploy to Nexus') {
+        stage('Build and Deploy to Nexus') {
             steps {
-                script {
-                    // Deploy the JAR file to Nexus
-                    sh "'${MVN_HOME}/bin/mvn' deploy"
-                }
+                // Deploy the artifact to Nexus repository
+                sh 'mvn clean deploy -DskipTests'
             }
         }
     }
-
+    
     post {
         success {
-            echo 'Deployment successful!'
+            echo 'Deployment Successful!'  
         }
         failure {
-            echo 'Deployment failed!'
+            echo 'Deployment Failed!'  
         }
     }
 }
