@@ -1,10 +1,16 @@
-
 pipeline {
     agent any
     stages {
         stage('Clone') {
             steps {
                 git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
+            }
+        }
+        stage('Build and Deploy to Nexus') {
+            steps {
+                // Build and deploy the artifact to Nexus repository
+                // Use Maven deploy command with Nexus credentials configured in Jenkins
+                sh 'mvn clean deploy -DskipTests'
             }
         }
         stage('Build and Deploy') {
@@ -25,10 +31,10 @@ pipeline {
     }
     post {
         success {
-            echo 'Deployment Successful!'  
+            echo 'Deployment Successful!'
         }
         failure {
-            echo 'Deployment Failed!'  
+            echo 'Deployment Failed!'
         }
     }
 }
