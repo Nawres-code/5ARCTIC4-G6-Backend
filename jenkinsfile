@@ -6,13 +6,22 @@ pipeline {
                 git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
             }
         }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') { // Replace 'SonarQube' with your SonarQube server configuration name
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
+                }
+            }
+        }
+        
         stage('Build and Deploy to Nexus') {
             steps {
-                // Build and deploy the artifact to Nexus repository
-                // Use Maven deploy command with Nexus credentials configured in Jenkins
+                // Deploy the artifact to Nexus repository
                 sh 'mvn clean deploy -DskipTests'
             }
         }
+        
         stage('Build and Deploy') {
             steps {
                 script {
@@ -29,6 +38,7 @@ pipeline {
             }
         }
     }
+    
     post {
         success {
             echo 'Deployment Successful!'
