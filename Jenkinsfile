@@ -19,11 +19,11 @@ pipeline {
         stage('Deploy to Nexus') {
             steps {
                 // Deploy the application to Nexus with credentials
-                withCredentials([usernamePassword(credentialsId: 'your-credential-id', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: '379d5c13-02ec-472d-b621-0ad495454d92', usernameVariable: 'admin', passwordVariable: '223JFT4672')]) {
                     // Set the Maven settings file path if needed
                     sh '''
                         mvn deploy -DskipTests -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8082/repository/maven-releases/ \
-                        -Dmaven.username=$NEXUS_USERNAME -Dmaven.password=$NEXUS_PASSWORD
+                        -Dmaven.username=admin -Dmaven.password=223JFT4672
                     '''
                 }
             }
