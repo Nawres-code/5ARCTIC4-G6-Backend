@@ -1,45 +1,44 @@
 pipeline {
-    agent any
+    agent any 
+
+    environment {
+        NEXUS_CREDENTIALS = credentials('nexus-credentials') // Replace with your Jenkins credentials ID
+        MVN_HOME = tool name: 'Maven 3.6.3', type: 'maven' // Ensure this matches your Maven installation in Jenkins
+    }
+
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                retry(3) { // Retries the Git clone up to 3 times in case of failure
-                    git(
-                        branch: 'yosserbacknew',
-                        url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
-                    )
+                // Checkout your source code from the repository
+                git url: 'https://github.com/yourusername/yourrepository.git', branch: 'main' // Replace with your repo URL
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                script {
+                    // Run Maven clean package
+                    sh "'${MVN_HOME}/bin/mvn' clean package"
                 }
             }
         }
-         stage('Build and Deploy to Nexus') {
+
+        stage('Deploy to Nexus') {
             steps {
-                // Deploy the artifact to Nexus repository
-                sh 'mvn clean deploy -DskipTests'
+                script {
+                    // Deploy the JAR file to Nexus
+                    sh "'${MVN_HOME}/bin/mvn' deploy"
+                }
             }
         }
-      //  stage('Build and Deploy') {
-      //      steps {
-        //        script {
-                    // Ensure Docker is running before building
-                    // Stop and remove any existing containers with the same name
-          //          sh 'docker compose down || true'
-
-                    // Build Docker images using docker-compose
-            //        sh 'docker compose build'
-
-                    // Bring up the services defined in docker-compose.yml
-              //      sh 'docker compose up -d'
-                //}
-            //}
-        //}
-       
     }
+
     post {
         success {
-            echo 'Deployment Successful!'  
+            echo 'Deployment successful!'
         }
         failure {
-            echo 'Deployment Failed!'  
+            echo 'Deployment failed!'
         }
     }
 }
