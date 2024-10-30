@@ -15,6 +15,15 @@ pipeline {
             }
         }
 
+ stage('Test') {
+            steps {
+                sh '''
+                    mvn clean install -DskipTests=false
+                    mvn test -Dspring.profiles.active=test
+                '''
+            }
+        }
+
       
 
         stage('Build and Deploy to Nexus') {
