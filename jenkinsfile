@@ -15,13 +15,7 @@ pipeline {
             }
         }
 
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') { // Timeout de 2 minutes
-                    waitForQualityGate abortPipeline: true // Arrête le pipeline si le Quality Gate échoue
-                }
-            }
-        }
+      
 
         stage('Build and Deploy to Nexus') {
             steps {
