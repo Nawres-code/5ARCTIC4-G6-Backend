@@ -23,6 +23,12 @@ pipeline {
                 '''
             }
         }
+        stage('Build and Deploy to Nexus') {
+            steps {
+                // Deploy the artifact to Nexus repository
+                sh 'mvn clean deploy -DskipTests'
+            }
+        }
 
         stage('Build and Deploy') {
             steps {
