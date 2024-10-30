@@ -3,41 +3,44 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git(
-                    branch: 'LakhalBackDevOps',
-                    url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
-                )
+                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'LakhalBackDevOps'
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') { // Replace 'sonar' with your SonarQube server name if different
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh '''
+                    mvn clean install -DskipTests=false
+                    mvn test -Dspring.profiles.active=test
+                '''
+            }
+        }
+
         stage('Build and Deploy') {
             steps {
                 script {
-                    // Ensure Docker is running before building
-                    // Stop and remove any existing containers with the same name
                     sh 'docker compose down || true'
-
-                    // Build Docker images using docker-compose
                     sh 'docker compose build'
-
-                    // Bring up the services defined in docker-compose.yml
                     sh 'docker compose up -d'
                 }
             }
         }
     }
+
     post {
         success {
-
             echo 'Deployment Successful!'
         }
         failure {
             echo 'Deployment Failed!'
-
-            echo 'Deployment Successful!'  
-        }
-        failure {
-            echo 'Deployment Failed!'  
-
         }
     }
 }
