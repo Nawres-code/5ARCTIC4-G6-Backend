@@ -11,15 +11,22 @@ pipeline {
                 }
             }
         }
-
-        stage('Build and Deploy to Nexus') {
+        stage('Build and Deploy') {
             steps {
-                // Deploy the artifact to Nexus repository
-                sh 'mvn clean deploy -DskipTests'
+                script {
+                    // Ensure Docker is running before building
+                    // Stop and remove any existing containers with the same name
+                    sh 'docker compose down || true'
+
+                    // Build Docker images using docker-compose
+                    sh 'docker compose build'
+
+                    // Bring up the services defined in docker-compose.yml
+                    sh 'docker compose up -d'
+                }
             }
         }
     }
-    
     post {
         success {
             echo 'Deployment Successful!'  
