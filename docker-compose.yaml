@@ -16,7 +16,7 @@ services:
       retries: 10
 
   backend:
-    image: salsabilhamraoui510802/artic5-devops:backend
+    image: salsabilhamraoui510802/devops-salsabyl:backend
     container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
@@ -32,7 +32,7 @@ services:
       - my-network
 
   frontend:
-    image: salsabilhamraoui510802/artic5-devops:frontend
+    image: salsabilhamraoui510802/devops-salsabyl:frontend
     container_name: frontend-container
     ports:
       - "4200:80"
