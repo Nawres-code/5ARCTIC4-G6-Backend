@@ -1,38 +1,45 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                // Checkout the code from the Git repository
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'yosserbacknew'
+                retry(3) { // Retries the Git clone up to 3 times in case of failure
+                    git(
+                        branch: 'yosserbacknew',
+                        url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                    )
+                }
             }
         }
+         stage('Build and Deploy to Nexus') {
+            steps {
+                // Deploy the artifact to Nexus repository
+                sh 'mvn clean deploy -DskipTests'
+            }
+        }
+      //  stage('Build and Deploy') {
+      //      steps {
+        //        script {
+                    // Ensure Docker is running before building
+                    // Stop and remove any existing containers with the same name
+          //          sh 'docker compose down || true'
 
-        stage('Build') {
-            steps {
-                // Build the application using Maven
-                sh 'mvn clean package -DskipTests'
-            }
-        }
+                    // Build Docker images using docker-compose
+            //        sh 'docker compose build'
 
-        stage('Deploy to Nexus') {
-            steps {
-                // Deploy the application to Nexus directly using the username and password
-                sh '''
-                    mvn deploy -DskipTests -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8082/repository/maven-releases/ \
-                    -Dmaven.username=admin -Dmaven.password=223JFT4672
-                '''
-            }
-        }
+                    // Bring up the services defined in docker-compose.yml
+              //      sh 'docker compose up -d'
+                //}
+            //}
+        //}
+       
     }
-
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Deployment Successful!'  
         }
         failure {
-            echo 'Pipeline failed. Please check the logs.'
+            echo 'Deployment Failed!'  
         }
     }
 }
