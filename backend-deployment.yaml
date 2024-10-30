@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: lakhalacr.azurecr.io/my-backend:latest
+        ports:
+        - containerPort: 9200  
+        env:
+        - name: MYSQL_HOST
+          value: "mysql"  
+        - name: MYSQL_DATABASE
+          value: "testParking1"
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_PASSWORD
+          value: "root"

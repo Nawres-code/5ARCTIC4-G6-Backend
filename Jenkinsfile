@@ -27,10 +27,17 @@ pipeline {
     }
     post {
         success {
+
             echo 'Deployment Successful!'
         }
         failure {
             echo 'Deployment Failed!'
+
+            echo 'Deployment Successful!'  
+        }
+        failure {
+            echo 'Deployment Failed!'  
+
         }
     }
 }
