@@ -1,38 +1,38 @@
 pipeline {
     agent any
+
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                retry(3) { // Retries the Git clone up to 3 times in case of failure
-                    git(
-                        branch: 'yosserbacknew',
-                        url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
-                    )
-                }
+                // Checkout the code from the Git repository
+                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'yosserbacknew'
             }
         }
-        stage('Build and Deploy') {
+
+        stage('Build') {
             steps {
-                script {
-                    // Ensure Docker is running before building
-                    // Stop and remove any existing containers with the same name
-                    sh 'docker compose down || true'
+                // Build the application using Maven
+                sh 'mvn clean package -DskipTests'
+            }
+        }
 
-                    // Build Docker images using docker-compose
-                    sh 'docker compose build'
-
-                    // Bring up the services defined in docker-compose.yml
-                    sh 'docker compose up -d'
-                }
+        stage('Deploy to Nexus') {
+            steps {
+                // Deploy the application to Nexus directly using the username and password
+                sh '''
+                    mvn deploy -DskipTests -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8082/repository/maven-releases/ \
+                    -Dmaven.username=admin -Dmaven.password=223JFT4672
+                '''
             }
         }
     }
+
     post {
         success {
-            echo 'Deployment Successful!'  
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Deployment Failed!'  
+            echo 'Pipeline failed. Please check the logs.'
         }
     }
 }
