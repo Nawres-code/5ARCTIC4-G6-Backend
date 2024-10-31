@@ -16,7 +16,7 @@ services:
       retries: 10
 
   backend:
-    image: yosserchb123/backimgfinal
+    image: yosserchb123/backimg1
     container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
