@@ -48,6 +48,10 @@ services:
       - my-network
     volumes:
       - ./mysql-exporter/.my.cnf:/etc/mysql/.my.cnf 
+    environment:
+      - MYSQL_CONFIG_FILE=/root/.my.cnf  # Set the environment variable
+    depends_on:
+      - mysql  
 
 networks:
   my-network:
