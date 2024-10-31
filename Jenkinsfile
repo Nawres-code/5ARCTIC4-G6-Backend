@@ -11,20 +11,6 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sq1') { // Replace 'sonar' with your SonarQube server name if different
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
-                }
-            }
-        }
-
-        stage('Build and Deploy to Nexus') {
-            steps {
-                // Deploy the artifact to Nexus repository
-                sh 'mvn clean deploy -DskipTests'
-            }
-        }
          stage('Build and Deploy') {
             steps {
                 script {
