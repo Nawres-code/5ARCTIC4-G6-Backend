@@ -1,21 +1,31 @@
 pipeline {
     agent any
     stages {
-        stage('Clone') {
+        stage('Clean') {
             steps {
-                git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
+                // Nettoie le répertoire de travail
+                deleteDir()
             }
         }
 
+        stage('Clone') {
+    steps {
+        retry(3) { // Retry 3 times
+            git url: 'https://github.com/Nawres-code/DevOpsBackend.git', branch: 'salsabilbackdevops'
+        }
+    }
+}
+
+
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sq1') { // Remplacez 'sq1' par le nom de votre serveur SonarQube configuré
+                withSonarQubeEnv('sq1') { // Replace 'sq1' with your SonarQube server name
                     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
                 }
             }
         }
 
- stage('Test') {
+        stage('Test') {
             steps {
                 sh '''
                     mvn clean install -DskipTests=false
@@ -23,8 +33,6 @@ pipeline {
                 '''
             }
         }
-
-      
 
         stage('Build and Deploy to Nexus') {
             steps {
@@ -35,9 +43,12 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    sh 'docker compose down || true'
-                    sh 'docker compose build'
-                    sh 'docker compose up -d'
+                    // Tear down any existing containers
+                    sh 'docker-compose down || true'
+                    
+                    
+                    // Start containers in detached mode
+                    sh 'docker-compose up -d'
                 }
             }
         }
