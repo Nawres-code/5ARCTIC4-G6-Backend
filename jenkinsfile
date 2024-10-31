@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    
     stages {
         stage('Clean') {
             steps {
@@ -8,8 +9,7 @@ pipeline {
             }
         }
 
-
-    stage('Clone') {
+        stage('Clone') {
             steps {
                 retry(3) { // Retries the Git clone up to 3 times in case of failure
                     git(
@@ -18,7 +18,7 @@ pipeline {
                     )
                 }
             }
-
+        }
 
         stage('SonarQube Analysis') {
             steps {
@@ -48,7 +48,6 @@ pipeline {
                 script {
                     // Tear down any existing containers
                     sh 'docker-compose down || true'
-                    
                     
                     // Start containers in detached mode
                     sh 'docker-compose up -d'
