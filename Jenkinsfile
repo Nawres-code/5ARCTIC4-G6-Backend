@@ -26,12 +26,12 @@ pipeline {
                 }
             }
         }
-         stage('Configure MySQL Metrics') {
+         stage('Configure Prometheus') {
             steps {
                 script {
-                    // Ensure the MySQL Exporter service is up and configured in Prometheus
-                    sh 'docker exec prometheus sh -c "kill -HUP 1"' // Reload Prometheus config
-                    echo 'MySQL metrics configuration completed in Prometheus.'
+                    // Reload Prometheus configuration
+                    sh 'docker exec prometheus sh -c "kill -HUP 1"'
+                    echo 'Prometheus configuration reloaded for MySQL metrics.'
                 }
             }
         }
