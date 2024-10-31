@@ -1,7 +1,7 @@
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql-container
+    container_name: mysql-container1
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: testParking1
@@ -17,7 +17,7 @@ services:
 
   backend:
     image: yosserchb123/backnew
-    container_name: backend-container
+    container_name: backend-container1
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
@@ -33,7 +33,7 @@ services:
 
   frontend:
     image: yosserchb123/frontnew
-    container_name: frontend-container
+    container_name: frontend-container1
     ports:
       - "4200:80"
     networks:
