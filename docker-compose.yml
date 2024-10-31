@@ -3,7 +3,6 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: testParking1
@@ -19,7 +18,6 @@ services:
 
   backend:
     image: nawreslakhal/devops:backend
-    container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
@@ -35,7 +33,6 @@ services:
 
   frontend:
     image: nawreslakhal/devops:frontend
-    container_name: frontend-container
     ports:
       - "4200:80"
     networks:
@@ -43,29 +40,10 @@ services:
 
   mysql-exporter:
     image: prom/mysqld-exporter
-    container_name: mysql-exporter
     environment:
-      DATA_SOURCE_NAME: "root:root@(mysql-container:3306)/"
+      DATA_SOURCE_NAME: "root:root@(mysql:3306)/"
     ports:
       - "9104:9104"  # MySQL Exporter
-    networks:
-      - my-network
-
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    ports:
-      - "9090:9090"  # Prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml  # Ensure prometheus.yml is in your project directory
-    networks:
-      - my-network
-
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3000:3000"  # Grafana
     networks:
       - my-network
 
