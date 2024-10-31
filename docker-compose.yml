@@ -1,3 +1,5 @@
+version: '3.8'  # Define the version of Docker Compose
+
 services:
   mysql:
     image: mysql:8.0
@@ -16,8 +18,8 @@ services:
       retries: 10
 
   backend:
-    image: salsabilhamraoui510802/salsabilpipeline:backend
-    container_name: backend-container
+    image: salsabilhamraoui510802/salsabylhamraoui:back  # Use the correct image name and tag
+    container_name: backend-container  # Corrected container name for consistency
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
@@ -32,8 +34,8 @@ services:
       - my-network
 
   frontend:
-    image: salsabilhamraoui510802/salsabilpipeline:frontend
-    container_name: frontend-container
+    image: salsabilhamraoui510802/salsabylhamraoui:latest  # Specify the latest tag or whichever you prefer
+    container_name: frontend-container  # Consistent naming
     ports:
       - "4200:80"
     networks:
