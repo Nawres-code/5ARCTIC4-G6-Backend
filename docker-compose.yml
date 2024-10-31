@@ -46,6 +46,8 @@ services:
       - "9104:9104"  # MySQL Exporter
     networks:
       - my-network
+    volumes:
+    - ./mysql-exporter/.my.cnf:/etc/mysql/.my.cnf  
 
 networks:
   my-network:
