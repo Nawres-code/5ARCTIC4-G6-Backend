@@ -59,14 +59,6 @@ services:
     networks:
       - my-network
 
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    networks:
-      - my-network
-
 networks:
   my-network:
     driver: bridge
