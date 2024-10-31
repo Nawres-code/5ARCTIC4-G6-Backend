@@ -13,6 +13,14 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>GestionParking</name>
 	<description>Spring Boot project </description>
+	<!-- Deploy to Nexus -->
+	<distributionManagement>
+		<repository>
+			<id>deploymentRepo</id>
+			<name>Nexus Repository</name>
+			<url>http://192.168.56.50:8081/repository/maven-releases/</url>
+		</repository>
+	</distributionManagement>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
