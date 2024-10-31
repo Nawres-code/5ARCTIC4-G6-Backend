@@ -11,6 +11,14 @@ pipeline {
                 }
             }
         }
+        stage('Test') {
+            steps {
+                sh '''
+                    mvn clean install -DskipTests=false
+                    mvn test -Dspring.profiles.active=test
+                '''
+            }
+        }
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sq1') { // Replace 'sonar' with your SonarQube server name if different
