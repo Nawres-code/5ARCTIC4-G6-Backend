@@ -32,7 +32,7 @@ services:
       - my-network
 
   frontend:
-    image: yosserchb123/frontimg
+    image: yosserchb123/frontimgf
     container_name: frontend-container
     ports:
       - "4200:80"
