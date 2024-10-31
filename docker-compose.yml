@@ -47,7 +47,7 @@ services:
     networks:
       - my-network
     volumes:
-    - ./mysql-exporter/.my.cnf:/etc/mysql/.my.cnf  
+      - ./mysql-exporter/.my.cnf:/etc/mysql/.my.cnf 
 
 networks:
   my-network:
