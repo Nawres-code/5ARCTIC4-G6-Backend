@@ -43,9 +43,9 @@ services:
     image: prom/mysqld-exporter
     container_name: mysql-exporter
     environment:
-      DATA_SOURCE_NAME: "root:root@(mysql-container:3306)/"
+      DATA_SOURCE_NAME: "root:root@(mysql:3306)/"
     ports:
-      - "9104:9104"  # MySQL Exporter
+      - "9104:9104"
     networks:
       - my-network
 
@@ -53,9 +53,9 @@ services:
     image: prom/prometheus
     container_name: prometheus
     ports:
-      - "9090:9090"  # Prometheus
+      - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml  # Ensure prometheus.yml is in your project directory
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - my-network
 
@@ -63,7 +63,7 @@ services:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - "3000:3000"  # Grafana
+      - "3000:3000"
     networks:
       - my-network
 
