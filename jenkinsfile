@@ -8,13 +8,16 @@ pipeline {
             }
         }
 
-        stage('Clone') {
-    steps {
-        retry(3) { // Retry 3 times
-            git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git', branch: 'salsabilbackdevops'
-        }
-    }
-}
+
+    stage('Clone') {
+            steps {
+                retry(3) { // Retries the Git clone up to 3 times in case of failure
+                    git(
+                        branch: 'salsabilbackdevops', // Your desired branch
+                        url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git' // Repository URL
+                    )
+                }
+            }
 
 
         stage('SonarQube Analysis') {
