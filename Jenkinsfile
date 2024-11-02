@@ -9,21 +9,23 @@ pipeline {
     stages {
         stage('Clone Repositories') {
             steps {
-                
                 dir('backend') {
-                    git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git', branch: 'LakhalBackDevOps'
+                    retry(3) { 
+                        git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git', branch: 'LakhalBackDevOps'
+                    }
                 }
                 
                 dir('frontend') {
-                    git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git', branch: 'LakhalDevOpsFrontend' 
-                }
-            }
-        }
+                    retry(3) { 
+                        git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git', branch: 'LakhalDevOpsFrontend' 
+                    }
+                } 
+            } 
+        } 
 
         stage('Build Docker Images') {
             steps {
                 script {
-                   
                     dir('backend') {
                         sh "docker build -t $DOCKER_IMAGE_BACK ."
                     }
@@ -31,52 +33,41 @@ pipeline {
                     dir('frontend') {
                         sh "docker build -t $DOCKER_IMAGE_FRONT ."
                     }
-                }
-            }
-        }
+                } 
+            } 
+        } 
 
         stage('Pull and Tag MySQL Image') {
             steps {
                 script {
-                    
                     sh "docker pull mysql:latest"
-                    
-                    
                     sh "docker tag mysql:latest $DOCKER_IMAGE_MYSQL"
-                }
-            }
-        }
+                } 
+            } 
+        } 
 
         stage('Push Docker Images to Docker Hub') {
             steps {
                 script {
-                    
                     sh "echo ${DOCKER_HUB_CREDENTIALS.password} | docker login -u ${DOCKER_HUB_CREDENTIALS.username} --password-stdin"
-                    
-                    
                     sh "docker push $DOCKER_IMAGE_BACK"
                     sh "docker push $DOCKER_IMAGE_FRONT"
                     sh "docker push $DOCKER_IMAGE_MYSQL"
-                    
-                    
                     sh "docker logout"
-                }
-            }
-        }
+                } 
+            } 
+        } 
 
         stage('Build and Deploy') {
             steps {
                 script {
-                    
                     sh 'docker compose down || true'
-                    
                     sh 'docker compose build'
-                    
                     sh 'docker compose up -d'
-                }
-            }
-        }
-    }
+                } 
+            } 
+        } 
+    } 
 
     post {
         success {
@@ -85,5 +76,5 @@ pipeline {
         failure {
             echo 'Image push or deployment failed!'
         }
-    }
-}
+    } 
+} 
