@@ -1,11 +1,71 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials') 
+        DOCKER_IMAGE_BACK = "nawreslakhal/devops1:backend"  
+        DOCKER_IMAGE_FRONT = "nawreslakhal/devops1:frontend" 
+        DOCKER_IMAGE_MYSQL = "nawreslakhal/devops1:mysql"     
+    }
     stages {
-        stage('Clone') {
+        stage('Clone Repositories') {
+            parallel {
+                stage('Clone Frontend Repo') {
+                    steps {
+                        dir('frontend') {
+                            git branch: 'LakhalDevOpsFrontend', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git'
+                        }
+                    }
+                }
+                stage('Clone Backend Repo') {
+                    steps {
+                        dir('backend') {
+                            git branch: 'LakhalBackDevOps', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                dir('backend') {
+                    script {
+                        sh 'mvn clean package -DskipTests' // Build the backend, skipping tests
+                    }
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
             steps {
                 script {
-                    // Clone the repository
-                    git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git', branch: 'LakhalBackDevOps'
+                    dir('backend') {
+                        sh "docker build -t $DOCKER_IMAGE_BACK ."
+                    }
+                    dir('frontend') {
+                        sh "docker build -t $DOCKER_IMAGE_FRONT ."
+                    }
+                }
+            }
+        }
+
+        stage('Pull and Tag MySQL Image') {
+            steps {
+                script {
+                    sh "docker pull mysql:latest"
+                    sh "docker tag mysql:latest $DOCKER_IMAGE_MYSQL"
+                }
+            }
+        }
+
+        stage('Push Docker Images to Docker Hub') {
+            steps {
+                script {
+                    sh "echo ${DOCKER_HUB_CREDENTIALS.password} | docker login -u ${DOCKER_HUB_CREDENTIALS.username} --password-stdin"
+                    sh "docker push $DOCKER_IMAGE_BACK"
+                    sh "docker push $DOCKER_IMAGE_FRONT"
+                    sh "docker push $DOCKER_IMAGE_MYSQL"
+                    sh "docker logout"
                 }
             }
         }
@@ -13,22 +73,9 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    // Stop any running containers and remove them
                     sh 'docker compose down || true'
-                    // Build the Docker images
                     sh 'docker compose build'
-                    // Start the containers in detached mode
                     sh 'docker compose up -d'
-                }
-            }
-        }
-
-        stage('Configure MySQL Metrics') {
-            steps {
-                script {
-                    // Reload Prometheus config to pick up the MySQL exporter
-                    sh 'docker exec prometheus sh -c "kill -HUP 1"' // Reload Prometheus config
-                    echo 'MySQL metrics configuration completed in Prometheus.'
                 }
             }
         }
@@ -36,10 +83,10 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment Successful!'
+            echo 'Images pushed to Docker Hub successfully and services deployed!'
         }
         failure {
-            echo 'Deployment Failed!'
+            echo 'Image push or deployment failed!'
         }
     }
 }
