@@ -11,31 +11,41 @@ pipeline {
                 }
             }
         }
-                stage('JUnit Test') {
-            steps {
-                sh '''
-                    mvn clean install -DskipTests=false
-                    mvn test -Dspring.profiles.active=test
-                '''
-            }
+stage('IUnit Test') {
+    steps {
+        script {
+            def installCommand = 'mvn clean install -DskipTests=false'
+            def testCommand = 'mvn test -Dspring.profiles.active=test'
+            
+            sh installCommand
+            sh testCommand
         }
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sq1') { 
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
-                }
-            }
-        }
+    }
+}
 
-        stage('Deploy to Nexus') {
-            steps {
-                sh 'mvn clean deploy -DskipTests'
+stage('SonarQube Analysis') {
+    steps {
+        script {
+            def sonarCommand = 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
+            withSonarQubeEnv('sq1') {
+                sh sonarCommand
             }
         }
+    }
+}
+
+stage('Deploy to Nexus') {
+    steps {
+        script {
+            def deployCommand = 'mvn clean deploy -DskipTests'
+            sh deployCommand
+        }
+    }
+}
          stage('Build and Deploy') {
             steps {
                 script {
-                    
+                   
                     sh 'docker compose down || true'
                     sh 'docker compose build'
                     sh 'docker compose up -d'
@@ -46,10 +56,10 @@ pipeline {
     
     post {
         success {
-            echo 'Deployment Successful!'  
+            echo 'Le déploiement a réussi !'  
         }
         failure {
-            echo 'Deployment Failed!'  
+            echo 'Le déploiement a échoué. Veuillez vérifier les logs pour plus de détails.'  
         }
     }
 }
