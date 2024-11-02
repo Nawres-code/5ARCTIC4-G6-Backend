@@ -39,6 +39,28 @@ services:
     networks:
       - my-network
 
+    
+    elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
+    container_name: elasticsearch-container
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    networks:
+      - my-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.5.1
+    container_name: kibana-container
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - my-network
+
 networks:
   my-network:
     driver: bridge
