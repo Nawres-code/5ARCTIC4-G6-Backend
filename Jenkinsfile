@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // Docker Hub credentials ID in Jenkins
+        DOCKER_HUB_CREDENTIALS = credentials('github-credentials') // Docker Hub credentials ID in Jenkins
         DOCKER_IMAGE_BACK = "nawreslakhal/devops1-back"
         DOCKER_IMAGE_FRONT = "nawreslakhal/devops1-front"
         DOCKER_IMAGE_MYSQL = "nawreslakhal/devops1-mysql"
@@ -51,7 +51,7 @@ pipeline {
             steps {
                 script {
                     // Log in to Docker Hub
-                    sh "echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin"
+                    sh "echo ${DOCKER_HUB_CREDENTIALS.password} | docker login -u ${DOCKER_HUB_CREDENTIALS.username} --password-stdin"
                     
                     // Push each Docker image to Docker Hub
                     sh "docker push $DOCKER_IMAGE_BACK:latest"
