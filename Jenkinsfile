@@ -7,21 +7,24 @@ pipeline {
         DOCKER_IMAGE_MYSQL = "nawreslakhal/devops1:mysql"     
     }
     stages {
-        stage('Clone Repositories') {
-            steps {
-                dir('backend') {
-                    retry(3) { 
-                        git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git', branch: 'LakhalBackDevOps'
+        stage('Clone Repos') {
+            parallel {
+                stage('Clone Frontend Repo') {
+                    steps {
+                        dir('frontend') {
+                            git branch: 'LakhalDevOpsFrontend', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git'
+                        }
                     }
                 }
-                
-                dir('frontend') {
-                    retry(3) { 
-                        git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git', branch: 'LakhalDevOpsFrontend' 
+                stage('Clone Backend Repo') {
+                    steps {
+                        dir('backend') {
+                            git branch: 'LakhalBackDevOps', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                        }
                     }
-                } 
-            } 
-        } 
+                }
+            }
+        }
 
         stage('Build Docker Images') {
             steps {
@@ -33,18 +36,18 @@ pipeline {
                     dir('frontend') {
                         sh "docker build -t $DOCKER_IMAGE_FRONT ."
                     }
-                } 
-            } 
-        } 
+                }
+            }
+        }
 
         stage('Pull and Tag MySQL Image') {
             steps {
                 script {
                     sh "docker pull mysql:latest"
                     sh "docker tag mysql:latest $DOCKER_IMAGE_MYSQL"
-                } 
-            } 
-        } 
+                }
+            }
+        }
 
         stage('Push Docker Images to Docker Hub') {
             steps {
@@ -54,9 +57,9 @@ pipeline {
                     sh "docker push $DOCKER_IMAGE_FRONT"
                     sh "docker push $DOCKER_IMAGE_MYSQL"
                     sh "docker logout"
-                } 
-            } 
-        } 
+                }
+            }
+        }
 
         stage('Build and Deploy') {
             steps {
@@ -64,10 +67,10 @@ pipeline {
                     sh 'docker compose down || true'
                     sh 'docker compose build'
                     sh 'docker compose up -d'
-                } 
-            } 
-        } 
-    } 
+                }
+            }
+        }
+    }
 
     post {
         success {
@@ -76,5 +79,5 @@ pipeline {
         failure {
             echo 'Image push or deployment failed!'
         }
-    } 
-} 
+    }
+}
