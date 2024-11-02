@@ -9,30 +9,8 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
+                // Clone the repository to access Dockerfiles
                 git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git', branch: 'LakhalBackDevOps'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sonar') {
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh '''
-                    mvn clean install -DskipTests=false
-                    mvn test -Dspring.profiles.active=test
-                '''
-            }
-        }
-
-        stage('Build and Deploy to Nexus') {
-            steps {
-                sh 'mvn clean deploy -DskipTests'
             }
         }
 
@@ -63,23 +41,14 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy with Docker Compose') {
-            steps {
-                script {
-                    sh 'docker compose down || true'
-                    sh 'docker compose up -d'
-                }
-            }
-        }
     }
 
     post {
         success {
-            echo 'Deployment Successful!'
+            echo 'Images pushed to Docker Hub successfully!'
         }
         failure {
-            echo 'Deployment Failed!'
+            echo 'Image push failed!'
         }
     }
 }
