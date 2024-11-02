@@ -2,9 +2,9 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials') 
-        DOCKER_IMAGE_BACK = "nawreslakhal/devops1:backend"  
-        DOCKER_IMAGE_FRONT = "nawreslakhal/devops1:frontend" 
-        DOCKER_IMAGE_MYSQL = "nawreslakhal/devops1:mysql"     
+        DOCKER_IMAGE_BACK = "nawreslakhal/devops:backend"  
+        DOCKER_IMAGE_FRONT = "nawreslakhal/devops:frontend" 
+        DOCKER_IMAGE_MYSQL = "nawreslakhal/devops:mysql"     
     }
     stages {
         stage('Clone Repositories') {
