@@ -22,17 +22,15 @@ stage('JUnit Test') {
         }
     }
 }
-
+        
 stage('SonarQube Analysis') {
-    steps {
-        script {
-            def sonarCommand = 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
-            withSonarQubeEnv('sq1') {
-                sh sonarCommand
+       steps {
+             withSonarQubeEnv('sq1') { // Replace 'sonar' with your SonarQube server name if different
+             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
+                }
             }
         }
-    }
-}
+
 
 stage('Deploy to Nexus') {
     steps {
