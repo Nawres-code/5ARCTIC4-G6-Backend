@@ -7,7 +7,7 @@ pipeline {
         DOCKER_IMAGE_MYSQL = "nawreslakhal/devops1:mysql"     
     }
     stages {
-        stage('Clone Repos') {
+        stage('Clone Repositories') {
             parallel {
                 stage('Clone Frontend Repo') {
                     steps {
@@ -26,13 +26,22 @@ pipeline {
             }
         }
 
+        stage('Build Backend') {
+            steps {
+                dir('backend') {
+                    script {
+                        sh 'mvn clean package -DskipTests' // Build the backend, skipping tests
+                    }
+                }
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
                 script {
                     dir('backend') {
                         sh "docker build -t $DOCKER_IMAGE_BACK ."
                     }
-                    
                     dir('frontend') {
                         sh "docker build -t $DOCKER_IMAGE_FRONT ."
                     }
