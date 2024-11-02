@@ -11,7 +11,7 @@ pipeline {
                 }
             }
         }
-stage('IUnit Test') {
+stage('JUnit Test') {
     steps {
         script {
             def installCommand = 'mvn clean install -DskipTests=false'
