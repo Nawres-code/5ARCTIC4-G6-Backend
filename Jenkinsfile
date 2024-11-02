@@ -59,16 +59,19 @@ pipeline {
         }
 
         stage('Push Docker Images to Docker Hub') {
-            steps {
-                script {
-                    sh "echo ${DOCKER_HUB_CREDENTIALS.password} | docker login -u ${DOCKER_HUB_CREDENTIALS.username} --password-stdin"
-                    sh "docker push $DOCKER_IMAGE_BACK"
-                    sh "docker push $DOCKER_IMAGE_FRONT"
-                    sh "docker push $DOCKER_IMAGE_MYSQL"
-                    sh "docker logout"
-                }
+    steps {
+        script {
+            // Using 'withCredentials' for accessing the credentials
+            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin"
+                sh "docker push $DOCKER_IMAGE_BACK"
+                sh "docker push $DOCKER_IMAGE_FRONT"
+                sh "docker push $DOCKER_IMAGE_MYSQL"
+                sh "docker logout"
             }
         }
+    }
+}
 
         stage('Build and Deploy') {
             steps {
