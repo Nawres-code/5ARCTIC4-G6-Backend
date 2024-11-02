@@ -34,7 +34,7 @@ services:
       - my-network
 
   frontend:
-    image: 22chaima22/frontendvagrant
+    image: 22chaima22/frontendfinale
     container_name: frontend-container
     ports:
       - "4200:80"
