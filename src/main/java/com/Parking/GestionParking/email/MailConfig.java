@@ -11,7 +11,7 @@ package com.Parking.GestionParking.email;//package com.Parking.GestionParking.em
 //    @Bean
 //    public JavaMailSender javaMailSender() {
 //        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-//        mailSender.setHost("localhost");
+//        mailSender.setHost("192.168.56.50");
 //        mailSender.setPort(1025);
 //        // Configurez ici les informations de connexion à votre serveur SMTP
 //        return mailSender;

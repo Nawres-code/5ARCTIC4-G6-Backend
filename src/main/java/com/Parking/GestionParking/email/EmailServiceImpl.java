@@ -27,7 +27,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setTo(user.getEmail());
             helper.setFrom(fromEmail);
             helper.setSubject("Password Reset");
-            String resetLink = "http://localhost:4200/#/reset-password?token=" + resetToken;
+            String resetLink = "http://192.168.56.50:4200/#/reset-password?token=" + resetToken;
 
             String emailContent = "Dear " + user.getUsername() + ",\n\n"
                     + "You have requested to reset your password. Please click the link below to reset your password:\n\n"

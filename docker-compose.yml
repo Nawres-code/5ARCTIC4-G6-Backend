@@ -12,13 +12,13 @@ services:
     networks:
       - my-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   backend:
-    image: 22chaima22/backend
+    image: 22chaima22/vagrantbackend
     container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
@@ -34,7 +34,7 @@ services:
       - my-network
 
   frontend:
-    image: 22chaima22/frontendvagrant
+    image: 22chaima22/vagrantfront
     container_name: frontend-container
     ports:
       - "4200:80"
