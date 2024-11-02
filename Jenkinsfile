@@ -9,11 +9,11 @@ pipeline {
     stages {
         stage('Clone Repositories') {
             steps {
-                // Clone the backend repository
+                
                 dir('backend') {
                     git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git', branch: 'LakhalBackDevOps'
                 }
-                // Clone the frontend repository
+                
                 dir('frontend') {
                     git url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git', branch: 'LakhalDevOpsFrontend' 
                 }
