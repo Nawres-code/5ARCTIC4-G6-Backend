@@ -36,20 +36,60 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Check Docker Images') {
             steps {
                 script {
-                    dir('backend') {
-                        sh "docker build -t $DOCKER_IMAGE_BACK ."
+                    def imageExists = { imageName ->
+                        return sh(script: "docker manifest inspect ${imageName} > /dev/null 2>&1", returnStatus: true) == 0
                     }
-                    dir('frontend') {
-                        sh "docker build -t $DOCKER_IMAGE_FRONT ."
+
+                    // Check for backend image
+                    if (imageExists(DOCKER_IMAGE_BACK)) {
+                        echo "Backend image already exists in Docker Hub."
+                    } else {
+                        echo "Backend image does not exist. Proceeding with build."
+                        env.BUILD_BACK_IMAGE = 'true'
+                    }
+
+                    // Check for frontend image
+                    if (imageExists(DOCKER_IMAGE_FRONT)) {
+                        echo "Frontend image already exists in Docker Hub."
+                    } else {
+                        echo "Frontend image does not exist. Proceeding with build."
+                        env.BUILD_FRONT_IMAGE = 'true'
+                    }
+
+                    // Check for MySQL image
+                    if (imageExists(DOCKER_IMAGE_MYSQL)) {
+                        echo "MySQL image already exists in Docker Hub."
+                    } else {
+                        echo "MySQL image does not exist. Proceeding with tag and push."
+                        env.BUILD_MYSQL_IMAGE = 'true'
+                    }
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            when { expression { env.BUILD_BACK_IMAGE == 'true' || env.BUILD_FRONT_IMAGE == 'true' } }
+            steps {
+                script {
+                    if (env.BUILD_BACK_IMAGE == 'true') {
+                        dir('backend') {
+                            sh "docker build -t $DOCKER_IMAGE_BACK ."
+                        }
+                    }
+                    if (env.BUILD_FRONT_IMAGE == 'true') {
+                        dir('frontend') {
+                            sh "docker build -t $DOCKER_IMAGE_FRONT ."
+                        }
                     }
                 }
             }
         }
 
         stage('Pull and Tag MySQL Image') {
+            when { expression { env.BUILD_MYSQL_IMAGE == 'true' } }
             steps {
                 script {
                     sh "docker pull mysql:latest"
@@ -59,14 +99,20 @@ pipeline {
         }
 
         stage('Push Docker Images to Docker Hub') {
+            when { expression { env.BUILD_BACK_IMAGE == 'true' || env.BUILD_FRONT_IMAGE == 'true' || env.BUILD_MYSQL_IMAGE == 'true' } }
             steps {
                 script {
-                    // Using 'withCredentials' for accessing the credentials
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin"
-                        sh "docker push $DOCKER_IMAGE_BACK"
-                        sh "docker push $DOCKER_IMAGE_FRONT"
-                        sh "docker push $DOCKER_IMAGE_MYSQL"
+                        if (env.BUILD_BACK_IMAGE == 'true') {
+                            sh "docker push $DOCKER_IMAGE_BACK"
+                        }
+                        if (env.BUILD_FRONT_IMAGE == 'true') {
+                            sh "docker push $DOCKER_IMAGE_FRONT"
+                        }
+                        if (env.BUILD_MYSQL_IMAGE == 'true') {
+                            sh "docker push $DOCKER_IMAGE_MYSQL"
+                        }
                         sh "docker logout"
                     }
                 }
@@ -88,10 +134,10 @@ pipeline {
 
     post {
         success {
-            echo 'Images pushed to Docker Hub successfully and services deployed!'
+            echo 'Images checked, built if necessary, pushed to Docker Hub, and services deployed successfully!'
         }
         failure {
-            echo 'Image push or deployment failed!'
+            echo 'Image check, push, or deployment failed!'
         }
     }
 }
