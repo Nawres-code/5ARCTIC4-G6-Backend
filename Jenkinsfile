@@ -35,18 +35,7 @@ pipeline {
                 }
             }
         }
-
-        stage('SonarQube Analysis') {
-            steps {
-                dir('backend') {
-                    withSonarQubeEnv('sonar') {  // Replace 'SonarQube' with the name of your SonarQube server in Jenkins
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=my-backend-project'
-                    }
-                }
-            }
-        }
-
-        stage('Run Unit Tests') {
+         stage('Run Unit Tests') {
             steps {
                 dir('backend') {
                     sh 'mvn test'  // Runs unit tests with JUnit and Mockito
@@ -72,7 +61,16 @@ pipeline {
                 ])
             }
         }
-        
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('backend') {
+                    withSonarQubeEnv('sonar') {  // Replace 'SonarQube' with the name of your SonarQube server in Jenkins
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=my-backend-project'
+                    }
+                }
+            }
+        } 
         stage('Build and Deploy to Nexus') {
             steps {
                 // Deploy the artifact to Nexus repository
