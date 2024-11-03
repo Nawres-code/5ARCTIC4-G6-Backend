@@ -35,16 +35,14 @@ pipeline {
                 }
             }
         }
-         stage('Run Unit Tests') {
+
+        stage('Run Unit Tests') {
             steps {
                 dir('backend') {
-                    sh 'mvn test'  /
-                    sh 'mvn -Dtest=com.Parking.GestionParking.ReservationServiceTest test'
+                    sh 'mvn -Dtest=com.Parking.GestionParking.ReservationServiceTest test' // Run specific unit test
                 }
             }
         }
-
-
 
         stage('Rapport JaCoCo') {
             steps {
@@ -52,7 +50,6 @@ pipeline {
                 sh 'mvn jacoco:report'
             }
         }
-
 
         stage('JaCoCo coverage report') {
             steps {
@@ -69,10 +66,11 @@ pipeline {
             steps {
                 dir('backend') {
                     withSonarQubeEnv('sonar') {  // Replace 'SonarQube' with the name of your SonarQube server in Jenkins
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=my-backend-project'
+                        sh '''
+                        mvn sonar:sonar -Dsonar.projectKey=my-backend-project \
                         -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
                         -Dsonar.test.inclusions=src/test/java/com/Parking/GestionParking/**
-                    '''
+                        '''
                     }
                 }
             }
