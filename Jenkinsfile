@@ -51,23 +51,20 @@ pipeline {
                 }
             }
         }
-        stage('Code Coverage (JaCoCo)') {
+        stage('Rapport JaCoCo') {
             steps {
-                dir('backend') {
-                    sh 'mvn clean verify'  // Executes JaCoCo plugin to generate coverage report
-                }
+                sh 'mvn test'
+                sh 'mvn jacoco:report'
             }
-            post {
-                success {
-                    echo 'Code coverage report generated successfully.'
-                }
-                always {
-                    jacoco execPattern: '**/target/jacoco.exec', 
-                           classPattern: '**/target/classes', 
-                           sourcePattern: '**/src/main/java', 
-                           exclusionPattern: '**/src/test*', 
-                           changeBuildStatus: true
-                }
+        }
+        stage('JaCoCo coverage report') {
+            steps {
+                step([$class: 'JacocoPublisher',
+                      execPattern: '**/target/jacoco.exec',
+                      classPattern: '**/classes',
+                      sourcePattern: '**/src',
+                      exclusionPattern: '/target/**/,**/*Test,**/*_javassist/**'
+                ])
             }
         }
         stage('Build and Deploy to Nexus') {
