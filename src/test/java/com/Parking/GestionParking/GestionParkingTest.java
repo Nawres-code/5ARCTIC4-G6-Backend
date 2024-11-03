@@ -8,6 +8,6 @@ public class GestionParkingTest {
 
     @Test
     public void testExample() {
-        assertTrue(true);  // Always passes, but it's a valid test
+        assertTrue(true);
     }
 }

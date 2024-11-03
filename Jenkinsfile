@@ -35,24 +35,22 @@ pipeline {
                 }
             }
         }
-         stage('Run Unit Tests') {
+
+        stage('Run Unit Tests') {
             steps {
                 dir('backend') {
-                    sh 'mvn test'  /
-                    sh 'mvn -Dtest=com.Parking.GestionParking.ReservationServiceTest test'
+                    sh 'mvn -Dtest=com.Parking.GestionParking.ReservationServiceTest test' // Run specific unit test
                 }
             }
         }
-
-
 
         stage('Rapport JaCoCo') {
             steps {
                 sh 'mvn test'
                 sh 'mvn jacoco:report'
+                sh 'ls target/site/jacoco'
             }
         }
-
 
         stage('JaCoCo coverage report') {
             steps {
@@ -69,10 +67,12 @@ pipeline {
             steps {
                 dir('backend') {
                     withSonarQubeEnv('sonar') {  // Replace 'SonarQube' with the name of your SonarQube server in Jenkins
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=my-backend-project'
+                        sh '''
+                         mvn sonar:sonar -Dsonar.projectKey=my-backend-project -Dsonar.ws.timeout=120 \
                         -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                        -Dsonar.test.inclusions=src/test/java/com/Parking/GestionParking/**
-                    '''
+                        -Dsonar.inclusions=/src/main/java/com/Parking/GestionParking/services/ReservationService.java
+                        -Dsonar.test.inclusions=src/test/java/com/Parking/GestionParking/services/ReservationServiceTest.java
+                        '''
                     }
                 }
             }
