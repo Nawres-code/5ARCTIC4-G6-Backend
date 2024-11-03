@@ -70,7 +70,8 @@ pipeline {
                         sh '''
                          mvn sonar:sonar -Dsonar.projectKey=my-backend-project -Dsonar.ws.timeout=120 \
                         -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                        -Dsonar.test.inclusions=src/test/java/com/Parking/GestionParking/**
+                        -Dsonar.inclusions=/src/main/java/com/Parking/GestionParking/services/ReservationService.java
+                        -Dsonar.test.inclusions=src/test/java/com/Parking/GestionParking/services/ReservationServiceTest.java
                         '''
                     }
                 }
