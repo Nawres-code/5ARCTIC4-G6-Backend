@@ -1,61 +1,54 @@
 pipeline {
     agent any
-
     stages {
-        stage('Maven Clone') {
+        stage('Clone') {
             steps {
-                script {
-                    retry(3) {
-                        // Cloner le dépôt Git
-                        git(
-                            branch: 'chbinouyosser_5arctic4_G6',
-                            url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
-                        )
-                    }
+                retry(3) { // Retries the Git clone up to 3 times in case of failure
+                    git(
+                        branch: 'yosserbacknew',
+                        url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                    )
                 }
             }
         }
-
-        stage('JUnit Test') {
+                stage('Test') {
             steps {
-                script {
-                    // Exécuter les tests JUnit
-                    sh 'mvn clean install -DskipTests=false'
-                    sh 'mvn test -Dspring.profiles.active=test'
-                }
+                sh '''
+                    mvn clean install -DskipTests=false
+                    mvn test -Dspring.profiles.active=test
+                '''
             }
         }
 
-
-        stage('Deploy to Nexus') {
+        stage('Build and Deploy to Nexus') {
             steps {
-                script {
-                    // Déployer le projet sur Nexus
-                    sh 'mvn clean deploy -DskipTests'
-                }
+                // Deploy the artifact to Nexus repository
+                sh 'mvn clean deploy -DskipTests'
             }
         }
-
-        stage('Build and Deploy') {
+         stage('Build and Deploy') {
             steps {
                 script {
-                    // Arrêter tous les conteneurs en cours d'exécution
+                    // Ensure Docker is running before building
+                    // Stop and remove any existing containers with the same name
                     sh 'docker compose down || true'
-                    // Construire les images Docker
+
+                    // Build Docker images using docker-compose
                     sh 'docker compose build'
-                    // Démarrer les conteneurs Docker
+
+                    // Bring up the services defined in docker-compose.yml
                     sh 'docker compose up -d'
                 }
             }
         }
     }
-
+    
     post {
         success {
-            echo 'Le déploiement a réussi !'
+            echo 'Deployment Successful!'  
         }
         failure {
-            echo 'Le déploiement a échoué. Veuillez vérifier les logs pour plus de détails.'
+            echo 'Deployment Failed!'  
         }
     }
 }
