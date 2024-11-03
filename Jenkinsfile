@@ -48,6 +48,7 @@ pipeline {
             steps {
                 sh 'mvn test'
                 sh 'mvn jacoco:report'
+                sh 'ls target/site/jacoco'
             }
         }
 
