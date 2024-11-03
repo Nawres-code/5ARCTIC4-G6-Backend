@@ -46,14 +46,17 @@ pipeline {
 
         stage('Rapport JaCoCo') {
             steps {
-                sh 'mvn test'
-                
-                sh 'ls target/site/jacoco'
+                dir('backend') {
+                    sh 'mvn test'
+                    sh 'mvn jacoco:report'
+                    sh 'ls target/site/jacoco'
             }
         }
+    }
 
         stage('JaCoCo coverage report') {
             steps {
+                dir('backend') {
                 step([$class: 'JacocoPublisher',
                       execPattern: '**/target/jacoco.exec',
                       classPattern: '**/classes',
@@ -62,6 +65,7 @@ pipeline {
                 ])
             }
         }
+    }
 
         stage('SonarQube Analysis') {
            steps {
