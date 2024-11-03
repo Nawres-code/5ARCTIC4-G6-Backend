@@ -1,10 +1,10 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials') 
-        DOCKER_IMAGE_BACK = "nawreslakhal/devops:backend"  
-        DOCKER_IMAGE_FRONT = "nawreslakhal/devops:frontend" 
-        DOCKER_IMAGE_MYSQL = "nawreslakhal/devops:mysql"     
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKER_IMAGE_BACK = "nawreslakhal/devops:backend"
+        DOCKER_IMAGE_FRONT = "nawreslakhal/devops:frontend"
+        DOCKER_IMAGE_MYSQL = "nawreslakhal/devops:mysql"
     }
     stages {
         stage('Clone Repositories') {
@@ -59,31 +59,32 @@ pipeline {
         }
 
         stage('Push Docker Images to Docker Hub') {
-    steps {
-        script {
-            // Using 'withCredentials' for accessing the credentials
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin"
-                sh "docker push $DOCKER_IMAGE_BACK"
-                sh "docker push $DOCKER_IMAGE_FRONT"
-                sh "docker push $DOCKER_IMAGE_MYSQL"
-                sh "docker logout"
+            steps {
+                script {
+                    // Using 'withCredentials' for accessing the credentials
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin"
+                        sh "docker push $DOCKER_IMAGE_BACK"
+                        sh "docker push $DOCKER_IMAGE_FRONT"
+                        sh "docker push $DOCKER_IMAGE_MYSQL"
+                        sh "docker logout"
+                    }
+                }
             }
         }
-    }
-}
 
         stage('Build and Deploy') {
-    steps {
-        script {
-            dir('backend') { 
-                sh 'docker compose down || true'
-                sh 'docker compose build'
-                sh 'docker compose up -d'
+            steps {
+                script {
+                    dir('backend') {
+                        sh 'docker compose down || true'
+                        sh 'docker compose build'
+                        sh 'docker compose up -d'
+                    }
+                }
             }
         }
     }
-}
 
     post {
         success {
