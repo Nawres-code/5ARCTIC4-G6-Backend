@@ -1,7 +1,8 @@
-package com.Parking.GestionParking.services;
+package com.Parking.GestionParking;
 
 
 import com.Parking.GestionParking.repository.ReservationRepository;
+import com.Parking.GestionParking.services.ReservationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
