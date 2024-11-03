@@ -64,19 +64,22 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                dir('backend') {
-                    withSonarQubeEnv('sonar') {  // Replace 'SonarQube' with the name of your SonarQube server in Jenkins
-                        sh '''
-                         mvn sonar:sonar -Dsonar.projectKey=my-backend-project -Dsonar.ws.timeout=120 \
+           steps {
+               dir('backend') {
+                   withSonarQubeEnv('sonar') {  // Replace 'sonar' with the name of your SonarQube server in Jenkins
+                    sh '''
+                    mvn sonar:sonar \
+                        -Dsonar.projectKey=my-backend-project \
+                        -Dsonar.ws.timeout=120 \
                         -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                        -Dsonar.inclusions=/src/main/java/com/Parking/GestionParking/services/ReservationService.java
-                        -Dsonar.test.inclusions=/src/test/java/com/Parking/GestionParking/services/ReservationServiceTest.java
-                        '''
-                    }
-                }
+                        -Dsonar.inclusions=src/main/java/com/Parking/GestionParking/services/ReservationService.java \
+                        -Dsonar.test.inclusions=src/test/java/com/Parking/GestionParking/services/ReservationServiceTest.java
+                '''
             }
         }
+    }
+}
+
 
         stage('Build and Deploy to Nexus') {
             steps {
