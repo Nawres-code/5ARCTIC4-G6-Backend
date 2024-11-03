@@ -26,7 +26,9 @@ stage('JUnit Test') {
 stage('SonarQube Analysis') {
     steps {
         script {
-            def sonarCommand = 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
+            // Retrieve the token from Jenkins credentials
+            def sonarToken = credentials('sonarqube-token')
+            def sonarCommand = "mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests -Dsonar.login=admin -Dsonar.password=${sonarToken}"
             withSonarQubeEnv('sq1') {
                 sh sonarCommand
             }
