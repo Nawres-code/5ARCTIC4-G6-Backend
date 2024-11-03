@@ -35,6 +35,47 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                dir('backend') {
+                    withSonarQubeEnv('sonar') {  // Replace 'SonarQube' with the name of your SonarQube server in Jenkins
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=my-backend-project'
+                    }
+                }
+            }
+        }
+         stage('Run Unit Tests') {
+            steps {
+                dir('backend') {
+                    sh 'mvn test'  // Runs unit tests with JUnit and Mockito
+                }
+            }
+        }
+        stage('Code Coverage (JaCoCo)') {
+            steps {
+                dir('backend') {
+                    sh 'mvn clean verify'  // Executes JaCoCo plugin to generate coverage report
+                }
+            }
+            post {
+                success {
+                    echo 'Code coverage report generated successfully.'
+                }
+                always {
+                    jacoco execPattern: '**/target/jacoco.exec', 
+                           classPattern: '**/target/classes', 
+                           sourcePattern: '**/src/main/java', 
+                           exclusionPattern: '**/src/test*', 
+                           changeBuildStatus: true
+                }
+            }
+        }
+        stage('Build and Deploy to Nexus') {
+                    steps {
+                        // Deploy the artifact to Nexus repository
+                        sh 'mvn clean deploy -DskipTests'
+                    }
+                }
 
         stage('Check Docker Images') {
             steps {
