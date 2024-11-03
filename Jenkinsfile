@@ -6,6 +6,7 @@ pipeline {
             steps {
                 script {
                     retry(3) {
+                        // Cloner le dépôt Git
                         git(
                             branch: 'chbinouyosser_5arctic4_G6',
                             url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
@@ -28,6 +29,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
+                    // Récupérer le token SonarQube
                     def sonarToken = credentials('sonarqube-token')
                     withSonarQubeEnv('sq1') {
                         // Utiliser bash pour éviter les erreurs de syntaxe
@@ -52,7 +54,7 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    // Arrêter tout conteneur en cours d'exécution
+                    // Arrêter tous les conteneurs en cours d'exécution
                     sh 'docker compose down || true'
                     // Construire les images Docker
                     sh 'docker compose build'
