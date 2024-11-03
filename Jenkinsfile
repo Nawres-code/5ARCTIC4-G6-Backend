@@ -4,11 +4,14 @@ pipeline {
     stages {
         stage('Maven Clone') {
             steps {
-                retry(3) { 
-                    git(
-                        branch: 'chbinouyosser_5arctic4_G6',
-                        url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
-                    )
+                script {
+                    // Retry cloning the repository if it fails
+                    retry(3) {
+                        git(
+                            branch: 'chbinouyosser_5arctic4_G6',
+                            url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                        )
+                    }
                 }
             }
         }
@@ -30,14 +33,8 @@ pipeline {
                     // Retrieve the token from Jenkins credentials
                     def sonarToken = credentials('sonarqube-token')
                     // Define the SonarQube command
-                    def sonarCommand = """
-                        mvn clean verify sonar:sonar \
-                        -Dsonar.projectKey=DevOpsBackend \
-                        -DskipTests \
-                        -Dsonar.login=admin \
-                        -Dsonar.password=${sonarToken}
-                    """
-                    
+                    def sonarCommand = "mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests -Dsonar.login=admin -Dsonar.password=${sonarToken}"
+
                     // Run SonarQube analysis
                     withSonarQubeEnv('sq1') {
                         sh sonarCommand
@@ -58,7 +55,7 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    // Stop any running containers
+                    // Stop any running containers, if any
                     sh 'docker compose down || true'
                     // Build Docker images
                     sh 'docker compose build'
