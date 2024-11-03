@@ -54,14 +54,6 @@ pipeline {
             }
         }
         
-        // New Stage for Publishing JUnit Test Results
-        stage('Publish JUnit Test Results') {
-            steps {
-                dir('backend') {
-                    junit '**/target/surefire-reports/*.xml' // Collect JUnit test results
-                }
-            }
-        }
 
         stage('Rapport JaCoCo') {
             steps {
