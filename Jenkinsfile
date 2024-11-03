@@ -5,7 +5,7 @@ pipeline {
             steps {
                 retry(3) { 
                     git(
-                        branch: 'yosserbacknew',
+                        branch: 'chbinouyosser_5arctic4_G6',
                         url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
                     )
                 }
