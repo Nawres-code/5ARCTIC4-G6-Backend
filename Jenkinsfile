@@ -35,6 +35,7 @@ pipeline {
                 }
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
                 dir('backend') {
@@ -44,19 +45,31 @@ pipeline {
                 }
             }
         }
-         stage('Run Unit Tests') {
+
+        stage('Run Unit Tests') {
             steps {
                 dir('backend') {
                     sh 'mvn test'  // Runs unit tests with JUnit and Mockito
                 }
             }
         }
+        
+        // New Stage for Publishing JUnit Test Results
+        stage('Publish JUnit Test Results') {
+            steps {
+                dir('backend') {
+                    junit '**/target/surefire-reports/*.xml' // Collect JUnit test results
+                }
+            }
+        }
+
         stage('Rapport JaCoCo') {
             steps {
                 sh 'mvn test'
                 sh 'mvn jacoco:report'
             }
         }
+        
         stage('JaCoCo coverage report') {
             steps {
                 step([$class: 'JacocoPublisher',
@@ -67,12 +80,13 @@ pipeline {
                 ])
             }
         }
+        
         stage('Build and Deploy to Nexus') {
-                    steps {
-                        // Deploy the artifact to Nexus repository
-                        sh 'mvn clean deploy -DskipTests'
-                    }
-                }
+            steps {
+                // Deploy the artifact to Nexus repository
+                sh 'mvn clean deploy -DskipTests'
+            }
+        }
 
         stage('Check Docker Images') {
             steps {
