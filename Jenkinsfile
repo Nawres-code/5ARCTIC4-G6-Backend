@@ -32,12 +32,9 @@ pipeline {
                 script {
                     // Retrieve the token from Jenkins credentials
                     def sonarToken = credentials('sonarqube-token')
-                    // Define the SonarQube command
-                    def sonarCommand = "mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests -Dsonar.login=admin -Dsonar.password=${sonarToken}"
-
-                    // Run SonarQube analysis
+                    // Define the SonarQube command without parameters in the environment
                     withSonarQubeEnv('sq1') {
-                        sh sonarCommand
+                        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests -Dsonar.login=${sonarToken}"
                     }
                 }
             }
