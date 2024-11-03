@@ -1,8 +1,7 @@
-version: '3.8'
 
 services:
   mysql:
-    image: nawreslakhal/devops1:mysql:latest
+    image: nawreslakhal/devops:mysql
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -18,7 +17,7 @@ services:
       retries: 10
 
   backend:
-    image: nawreslakhal/devops1:back:latest
+    image: nawreslakhal/devops:backend
     container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
@@ -34,7 +33,7 @@ services:
       - my-network
 
   frontend:
-    image: nawreslakhal/devops1:front:latest
+    image: nawreslakhal/devops:frontend
     container_name: frontend-container
     ports:
       - "4200:80"
