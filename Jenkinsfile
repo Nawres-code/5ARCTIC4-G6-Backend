@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Maven Clone') {
             steps {
@@ -16,9 +16,9 @@ pipeline {
         stage('JUnit Test') {
             steps {
                 script {
-                    // Use mvn clean install to build and test the project
+                    // Build the project and run tests
                     sh 'mvn clean install -DskipTests=false'
-                    // Execute tests with the specified profile
+                    // Execute tests with the specified Spring profile
                     sh 'mvn test -Dspring.profiles.active=test'
                 }
             }
@@ -29,11 +29,18 @@ pipeline {
                 script {
                     // Retrieve the token from Jenkins credentials
                     def sonarToken = credentials('sonarqube-token')
-                    def sonarCommand = "mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests -Dsonar.login=admin -Dsonar.password=${sonarToken}"
+                    // Define the SonarQube command
+                    def sonarCommand = """
+                        mvn clean verify sonar:sonar \
+                        -Dsonar.projectKey=DevOpsBackend \
+                        -DskipTests \
+                        -Dsonar.login=admin \
+                        -Dsonar.password=${sonarToken}
+                    """
                     
                     // Run SonarQube analysis
                     withSonarQubeEnv('sq1') {
-                        sh """${sonarCommand}"""
+                        sh sonarCommand
                     }
                 }
             }
@@ -51,7 +58,7 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    // Bring down any running containers safely
+                    // Stop any running containers
                     sh 'docker compose down || true'
                     // Build Docker images
                     sh 'docker compose build'
