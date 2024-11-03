@@ -26,21 +26,6 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    // Récupérer le token SonarQube
-                    def sonarToken = credentials('sonarqube-token')
-                    withSonarQubeEnv('sq1') {
-                        // Utiliser bash pour éviter les erreurs de syntaxe
-                        sh '''
-                        #!/bin/bash
-                        mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests -Dsonar.login=${sonarToken}
-                        '''
-                    }
-                }
-            }
-        }
 
         stage('Deploy to Nexus') {
             steps {
