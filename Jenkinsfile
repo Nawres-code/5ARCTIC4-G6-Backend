@@ -38,7 +38,8 @@ pipeline {
          stage('Run Unit Tests') {
             steps {
                 dir('backend') {
-                    sh 'mvn test'  // Runs unit tests with JUnit and Mockito
+                    sh 'mvn test'  /
+                    sh 'mvn -Dtest=com.Parking.GestionParking.ReservationServiceTest test'
                 }
             }
         }
