@@ -69,6 +69,9 @@ pipeline {
                 dir('backend') {
                     withSonarQubeEnv('sonar') {  // Replace 'SonarQube' with the name of your SonarQube server in Jenkins
                         sh 'mvn sonar:sonar -Dsonar.projectKey=my-backend-project'
+                        -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                        -Dsonar.test.inclusions=src/test/java/com/Parking/GestionParking/**
+                    '''
                     }
                 }
             }
