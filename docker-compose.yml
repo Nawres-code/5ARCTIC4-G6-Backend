@@ -18,8 +18,8 @@ services:
       retries: 10
 
   backend:
-    image: salsabilhamraoui510802/salsabylhamraoui:backendf # Use the correct image name and tag
-    container_name: backend-containerr  # Corrected container name for consistency
+    image: salsabilhamraoui510802/salsabylhamraoui:backendfff # Use the correct image name and tag
+    container_name: backend-containerrr  # Corrected container name for consistency
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root

@@ -61,7 +61,8 @@ public class SecurityConfig {
                                         "/parking/**",
                                         "/reclamation/**",
                                         "/feedback/**",
-                                        "/subHistory/**"
+                                        "/subHistory/**",
+                                        "/actuator/**"
 
 
 
