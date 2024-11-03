@@ -5,7 +5,7 @@ pipeline {
             steps {
                 retry(3) { // Retries the Git clone up to 3 times in case of failure
                     git(
-                        branch: '5ARCTIC4-G6-Backend',
+                        branch: 'chbinouyosser_5arctic4_G6',
                         url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
                     )
                 }
