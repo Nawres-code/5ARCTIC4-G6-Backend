@@ -39,7 +39,7 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 dir('backend') {
-                    sh 'mvn -Dtest=com.Parking.GestionParking.ReservationServiceTest test' // Run specific unit test
+                    sh 'mvn -Dtest=com.Parking.GestionParking.services.ReservationServiceTest test' // Run specific unit test
                 }
             }
         }
