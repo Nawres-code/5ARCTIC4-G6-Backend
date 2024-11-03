@@ -44,12 +44,14 @@ pipeline {
         }
 
 
+
         stage('Rapport JaCoCo') {
             steps {
                 sh 'mvn test'
                 sh 'mvn jacoco:report'
             }
         }
+
 
         stage('JaCoCo coverage report') {
             steps {
@@ -71,6 +73,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build and Deploy to Nexus') {
             steps {
                 // Deploy the artifact to Nexus repository
