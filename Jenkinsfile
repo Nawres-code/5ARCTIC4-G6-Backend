@@ -74,15 +74,16 @@ pipeline {
 }
 
         stage('Build and Deploy') {
-            steps {
-                script {
-                    sh 'docker compose down || true'
-                    sh 'docker compose build'
-                    sh 'docker compose up -d'
-                }
+    steps {
+        script {
+            dir('backend') { 
+                sh 'docker compose down || true'
+                sh 'docker compose build'
+                sh 'docker compose up -d'
             }
         }
     }
+}
 
     post {
         success {
