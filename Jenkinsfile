@@ -179,9 +179,9 @@ pipeline {
             steps {
                 script {
                     dir('backend') {
-                        sh '/usr/local/bin/docker-compose down'
-                        sh '/usr/local/bin/docker-compose build'
-                        sh '/usr/local/bin/docker-compose up -d'
+                        sh 'docker-compose down'
+                        sh 'docker-compose build'
+                        sh 'docker-compose up -d'
                     }
                 }
             }
