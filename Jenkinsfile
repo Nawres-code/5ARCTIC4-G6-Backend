@@ -13,6 +13,15 @@ pipeline {
                 }
             }
         }
+        stage('Pull and Tag MySQL Image') {
+                    when { expression { env.BUILD_MYSQL_IMAGE == 'true' } }
+                    steps {
+                        script {
+                            sh "docker pull mysql:latest"
+                            sh "docker tag mysql:latest $DOCKER_IMAGE_MYSQL"
+                        }
+                    }
+                }
 
         stage('Build Backend') {
             steps {
