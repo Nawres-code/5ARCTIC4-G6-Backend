@@ -12,7 +12,7 @@ pipeline {
                 stage('Clone Frontend Repo') {
                     steps {
                         dir('frontend') {
-                            git branch: 'LakhalDevOpsFrontend', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git'
+                            git branch: 'LakhalNawresFontend-5arctic-G6', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git'
                         }
                     }
                 }
