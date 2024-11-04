@@ -24,10 +24,15 @@ pipeline {
             }
         }
         stage('Unit test') {
-                    steps {
-                        // Test the project
-                        sh 'mvn test'
-                    }
+                     steps {
+                            script {
+                                def installCommand = 'mvn clean install -DskipTests=false'
+                                def testCommand = 'mvn test -Dspring.profiles.active=test'
+
+                                sh installCommand
+                                sh testCommand
+                            }
+                        }
         }
     }
     post {
