@@ -19,7 +19,7 @@ pipeline {
                 stage('Clone Backend Repo') {
                     steps {
                         dir('backend') {
-                            git branch: 'LakhalBackDevOps', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                            git branch: 'LakhalNawres-5Arctic5-G6', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
                         }
                     }
                 }
