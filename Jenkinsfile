@@ -28,4 +28,13 @@ pipeline {
             echo 'Failed to clone repositories!'
         }
     }
+  stage('Build Backend') {
+            steps {
+                dir('backend') {
+                    script {
+                        sh 'mvn clean package -DskipTests' // Build the backend, skipping tests
+                    }
+                }
+            }
+        }
 }
