@@ -19,7 +19,7 @@ services:
     depends_on:
       - mysql
 
-    image: 22chaima22/vagrantbackend
+    image: 22chaima22/ChaimaGHRIBI-5ARCTIC4-G6-GestionParking
     restart: on-failure
     container_name: backend-container
     environment:
