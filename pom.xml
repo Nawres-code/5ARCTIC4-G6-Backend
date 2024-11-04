@@ -133,6 +133,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>salsabilhamraoui-G6-GestionParking</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -147,7 +148,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>springboot-mysql-docker</finalName>
+
 	</build>
 	<distributionManagement>
 		<repository>
@@ -156,4 +157,5 @@
 			<url>http://localhost:8081/repository/maven-releases/</url>
 		</repository>
 	</distributionManagement>
+
 </project>
