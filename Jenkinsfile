@@ -13,7 +13,7 @@ pipeline {
                 }
             }
         }
-        stage('Pull and Tag MySQL Image') {
+   /*      stage('Pull and Tag MySQL Image') {
                     when { expression { env.BUILD_MYSQL_IMAGE == 'true' } }
                     steps {
                         script {
@@ -21,18 +21,18 @@ pipeline {
                             sh "docker tag mysql:latest $DOCKER_IMAGE_MYSQL"
                         }
                     }
-                }
+                } */
 
         stage('Build Backend') {
             steps {
                 dir('backend') {
                     script {
-                        sh 'mvn clean package -DskipTests' // Build the backend, skipping tests
+                        sh 'mvn clean install' // Build the backend, skipping tests
                     }
                 }
             }
         }
-        stage('Unit test') {
+        /* stage('Unit test') {
                      steps {
                             script {
                                 def installCommand = 'mvn clean install -DskipTests=false'
@@ -42,7 +42,7 @@ pipeline {
                                 sh testCommand
                             }
                         }
-        }
+        }*/
     }
     post {
         success {
