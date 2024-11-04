@@ -41,7 +41,17 @@ pipeline {
                             }
                         }
         }
+        stage('Docker Compose Up') {
+                    steps {
+                        echo 'Starting Docker Compose...'
+                        script {
+                            // Now that the JAR is available in target/, Docker can build the image
+                            sh 'sudo docker compose up --build -d'
+                        }
+                    }
+                }
     }
+
     post {
         success {
             echo 'Backend repository cloned and built successfully!'
@@ -50,4 +60,5 @@ pipeline {
             echo 'Failed to clone the backend repository or build it!'
         }
     }
+
 }
