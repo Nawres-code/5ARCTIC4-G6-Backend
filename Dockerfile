@@ -1,3 +1,3 @@
 FROM openjdk:17
-ADD target/springboot-mysql-docker.jar springboot-mysql-docker.jar
+ADD target/salsabilhamraoui-G6-GestionParking.jar salsabilhamraoui-G6-GestionParking.jar
 ENTRYPOINT ["java","-jar","/salsabilhamraoui-G6-GestionParking.jar"]
