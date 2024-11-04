@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/subscriptiondashboard")
-@CrossOrigin(origins = "http://192.168.163.145:4200")
+@CrossOrigin(origins = "http://192.168.163.146:4200")
 public class SubscriptionDashboardController {
 
     private final ISubscriptionRepository subscriptionRepository;
