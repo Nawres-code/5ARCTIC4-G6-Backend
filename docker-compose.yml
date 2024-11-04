@@ -18,7 +18,7 @@ services:
       retries: 10
 
   backend:
-    image: salsabilhamraoui510802/salsabylhamraoui:backendspringgg
+    image: salsabilhamraoui510802/salsabylhamraoui:backend
     # Use the correct image name and tag
     container_name: backend-containerrryaaa  # Corrected container name for consistency
     environment:
