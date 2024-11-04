@@ -32,6 +32,16 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Compose Up') {
+                            steps {
+                                echo 'Starting Docker Compose...'
+                                script {
+                                    // Now that the JAR is available in target/, Docker can build the image
+                                    sh 'sudo docker compose up --build -d'
+                                }
+                            }
+                        }
          stage('Unit test') {
                      steps {
                             script {
@@ -41,15 +51,7 @@ pipeline {
                             }
                         }
         }
-        stage('Docker Compose Up') {
-                    steps {
-                        echo 'Starting Docker Compose...'
-                        script {
-                            // Now that the JAR is available in target/, Docker can build the image
-                            sh 'sudo docker compose up --build -d'
-                        }
-                    }
-                }
+
     }
 
     post {
