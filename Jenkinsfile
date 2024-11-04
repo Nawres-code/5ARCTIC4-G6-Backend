@@ -1,34 +1,20 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKER_IMAGE_BACK = "firassaafi/firassaafi:backend"
+        DOCKER_IMAGE_MYSQL = "firassaafi/firassaafi:mysql"
+    }
     stages {
-        stage('Clone Repositories') {
-            parallel {
-                stage('Clone Frontend Repo') {
-                    steps {
-                        dir('frontend') {
-                            git branch: 'SaafiFiras-5ARCTIC4-G6', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Frontend.git'
-                        }
-                    }
-                }
-                stage('Clone Backend Repo') {
-                    steps {
-                        dir('backend') {
-                            git branch: 'SaafiFiras-5ARCTIC4-G6', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
-                        }
-                    }
+        stage('Clone Backend Repo') {
+            steps {
+                dir('backend') {
+                    git branch: 'SaafiFiras-5ARCTIC4-G6', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
                 }
             }
         }
-    }
-    post {
-        success {
-            echo 'Repositories cloned successfully!'
-        }
-        failure {
-            echo 'Failed to clone repositories!'
-        }
-    }
-  stage('Build Backend') {
+
+        stage('Build Backend') {
             steps {
                 dir('backend') {
                     script {
@@ -37,4 +23,13 @@ pipeline {
                 }
             }
         }
+    }
+    post {
+        success {
+            echo 'Backend repository cloned and built successfully!'
+        }
+        failure {
+            echo 'Failed to clone the backend repository or build it!'
+        }
+    }
 }
