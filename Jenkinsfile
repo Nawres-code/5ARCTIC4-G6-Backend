@@ -27,22 +27,20 @@ pipeline {
             steps {
                 dir('backend') {
                     script {
-                        sh 'mvn clean install' // Build the backend, skipping tests
+                        sh 'mvn clean package -DskipTests' // Build the backend, skipping tests
                     }
                 }
             }
         }
-        /* stage('Unit test') {
+         stage('Unit test') {
                      steps {
                             script {
-                                def installCommand = 'mvn clean install -DskipTests=false'
-                                def testCommand = 'mvn test -Dspring.profiles.active=test'
+                                def installCommand = 'mvn -Dtest=GestionParkingApplicationTests test'
 
                                 sh installCommand
-                                sh testCommand
                             }
                         }
-        }*/
+        }
     }
     post {
         success {
