@@ -2,23 +2,27 @@ version: '3.8'
 
 services:
   mysql:
-    image: salsabilhamraoui510802/gestionparking:mysql
+    image: firassaafi/firassaafidocker:mysql
     ports:
       - "3308:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: testParking1
       MYSQL_USER: root
+    networks:
+      - spring-net
+
+
 
   frontend:
-    image: salsabilhamraoui510802/gestionparking:frontend
+    image: firassaafi/firassaafidocker:frontend
     ports:
       - "4200:80"
     depends_on:
       - backend
 
   backend:
-    image: salsabilhamraoui510802/gestionparking:backendfinal8
+    image: firassaafi/firassaafidocker:backendfinal8
     ports:
       - "8080:8080"
     depends_on:
@@ -29,8 +33,11 @@ services:
       MYSQL_DATABASE: testParking1
       MYSQL_USER: root
       MYSQL_PASSWORD: root
+    networks:
+      - spring-net
 
 
 networks:
   spring-net:
+    name: spring-net
     driver: bridge
