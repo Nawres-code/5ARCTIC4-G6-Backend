@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://192.168.163.145:4200")
+@CrossOrigin(origins = "http://192.168.163.146:4200")
 @Tag(name= "Authentication")
 
 public class AuthenticationController {
