@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
-        DOCKER_IMAGE_BACK = "firassaafi/firassaafi:myback1"
+        DOCKER_IMAGE_BACK = "firassaafi/firassaafi:myback3"
         DOCKER_IMAGE_MYSQL = "firassaafi/firassaafi:mysql"
     }
     stages {
