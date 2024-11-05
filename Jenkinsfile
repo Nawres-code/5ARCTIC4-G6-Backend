@@ -36,16 +36,7 @@ pipeline {
             }
         }
 
-        stage('Docker Compose Up') {
-                            steps {
-                                echo 'Starting Docker Compose...'
-                                script {
-                                    sh 'docker build -t firassaafi/firassaafidocker:myback .'
-                                    // Now that the JAR is available in target/, Docker can build the image
-                                    sh 'docker-compose up -d'
-                                }
-                            }
-                        }
+
            stage('SonarQube Analysis') {
                    steps {
                        withSonarQubeEnv('sonar') {
@@ -58,6 +49,16 @@ pipeline {
                            sh 'mvn clean deploy -DskipTests'
                        }
                    }
+           stage('Docker Compose Up') {
+                                       steps {
+                                           echo 'Starting Docker Compose...'
+                                           script {
+                                               sh 'docker build -t firassaafi/firassaafidocker:myback .'
+                                               // Now that the JAR is available in target/, Docker can build the image
+                                               sh 'docker-compose up -d'
+                                           }
+                                       }
+                                   }
 
 //          stage('Unit test') {
 //                      steps {
