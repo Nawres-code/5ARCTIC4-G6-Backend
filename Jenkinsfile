@@ -2,13 +2,13 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
-        DOCKER_IMAGE_BACK = "firassaafi/firassaafi:backend"
+        DOCKER_IMAGE_BACK = "firassaafi/firassaafi:myback"
         DOCKER_IMAGE_MYSQL = "firassaafi/firassaafi:mysql"
     }
     stages {
         stage('Clone Backend Repo') {
             steps {
-                dir('backend') {
+                dir('myback') {
                     git branch: 'SaafiFiras-5ARCTIC4-G6', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('backend') {
+                dir('myback') {
                     script {
                         sh 'mvn clean package -DskipTests' // Build the backend, skipping tests
                     }
@@ -37,6 +37,7 @@ pipeline {
                             steps {
                                 echo 'Starting Docker Compose...'
                                 script {
+                                    sh 'docker build -t firassaafi/firassaafidocker:myback .'
                                     // Now that the JAR is available in target/, Docker can build the image
                                     sh 'docker-compose up -d'
                                 }

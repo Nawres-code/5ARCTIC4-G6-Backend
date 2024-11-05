@@ -15,14 +15,14 @@ services:
 
 
   frontend:
-    image: firassaafi/firassaafidocker:frontend
+    image: firassaafi/firassaafidocker:myfront
     ports:
       - "4200:80"
     depends_on:
       - backend
 
   backend:
-    image: firassaafi/firassaafidocker:backendfinal8
+    image: firassaafi/firassaafidocker:myback
     ports:
       - "8080:8080"
     depends_on:
