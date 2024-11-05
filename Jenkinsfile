@@ -8,8 +8,11 @@ pipeline {
     stages {
         stage('Clone Backend Repo') {
             steps {
-                retry(3) {
+                dir('myback')
+                {  retry(3)
+                 {
                     git branch: 'SaafiFiras-5ARCTIC4-G6', url: 'https://github.com/Nawres-code/5ARCTIC4-G6-Backend.git'
+                 }
                 }
             }
         }
