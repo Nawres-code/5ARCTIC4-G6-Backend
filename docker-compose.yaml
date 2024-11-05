@@ -19,7 +19,7 @@ services:
       retries: 10
 
   backend:
-    image: firassaafi/firassaafidocker:myback1
+    image: firassaafi/firassaafidocker:myback3
     container_name: backend-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://192.168.60.123:3307/testParking1?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
