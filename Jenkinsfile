@@ -48,11 +48,16 @@ pipeline {
                         }
            stage('SonarQube Analysis') {
                    steps {
-                       withSonarQubeEnv('sonar') { // Replace 'sq1' with your SonarQube server name
+                       withSonarQubeEnv('sonar') {
                            sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=DevOpsBackend -DskipTests'
                        }
                    }
                }
+           stage('Nexus') {
+                       steps {
+                           sh 'mvn clean deploy -DskipTests'
+                       }
+                   }
 
 //          stage('Unit test') {
 //                      steps {
