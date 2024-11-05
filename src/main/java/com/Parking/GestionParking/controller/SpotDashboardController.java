@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/spotDashboard")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("http://192.168.160.123:4200")
 public class SpotDashboardController {
 
     @Autowired

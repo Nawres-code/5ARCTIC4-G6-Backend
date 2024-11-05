@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("http://192.168.160.123:4200")
 
 @RestController
 @RequestMapping("/subscription")

@@ -24,7 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/reservationdashboard")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("http://192.168.160.123:4200")
 public class ReservationDashboardController {
 
     private final ParkingLotsRepository parkingLotsRepository;

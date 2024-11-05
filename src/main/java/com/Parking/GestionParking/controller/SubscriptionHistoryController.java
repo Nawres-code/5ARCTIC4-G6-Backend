@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/subHistory")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("http://192.168.160.123:4200")
 public class SubscriptionHistoryController {
     IGestionSubscriptionHistory subhistoryService;
     // @PostMapping("/assignCours/{numI}/{numC}")
