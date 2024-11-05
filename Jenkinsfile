@@ -6,7 +6,7 @@ pipeline {
         DOCKER_IMAGE_MYSQL = "firassaafi/firassaafi:mysql"
     }
     stages {
-        stage('Clone Backend Repo') {
+        stage('Clone git Repo') {
             steps {
                 dir('myback')
                 {  retry(3)
@@ -26,7 +26,7 @@ pipeline {
                     }
                 } */
 
-        stage('Build Backend') {
+        stage('Build') {
             steps {
                 dir('myback') {
                     script {
@@ -49,9 +49,10 @@ pipeline {
          stage('Unit test') {
                      steps {
                             dir ('myback') {
+                            script {
                                 def installCommand = 'mvn -Dtest=com.Parking.GestionParking.services.GestionParkingApplicationTests test'
-
                                 sh installCommand
+                            }
                             }
                         }
         }
@@ -60,10 +61,10 @@ pipeline {
 
     post {
         success {
-            echo 'Backend repository cloned and built successfully!'
+            echo 'Repository cloned and built successfully!'
         }
         failure {
-            echo 'Failed to clone the backend repository or build it!'
+            echo 'Failed to clone the repository or build it!'
         }
     }
 
