@@ -38,7 +38,7 @@ pipeline {
                                 echo 'Starting Docker Compose...'
                                 script {
                                     // Now that the JAR is available in target/, Docker can build the image
-                                    sh 'docker compose up'
+                                    sh 'docker-compose up -d'
                                 }
                             }
                         }
