@@ -48,8 +48,8 @@ pipeline {
                         }
          stage('Unit test') {
                      steps {
-                            script {
-                                def installCommand = 'mvn -Dtest=GestionParkingApplicationTests test'
+                            dir ('myback') {
+                                def installCommand = 'mvn -Dtest=com.Parking.GestionParking.services.GestionParkingApplicationTests test'
 
                                 sh installCommand
                             }
