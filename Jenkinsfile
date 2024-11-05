@@ -46,16 +46,16 @@ pipeline {
                                 }
                             }
                         }
-//          stage('Unit test') {
-//                      steps {
-//                             dir ('myback') {
-//                             script {
-//                                 def installCommand = 'mvn -Dtest=com.Parking.GestionParking.services.GestionParkingApplicationTests test'
-//                                 sh installCommand
-//                             }
-//                             }
-//                      }
-//           }
+         stage('Unit test') {
+                     steps {
+                            dir ('myback') {
+                            script {
+                                def installCommand = 'mvn -Dtest=com.Parking.GestionParking.services.GestionParkingApplicationTests test'
+                                sh installCommand
+                            }
+                            }
+                     }
+          }
 
         }
 
